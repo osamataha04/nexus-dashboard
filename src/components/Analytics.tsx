@@ -57,7 +57,7 @@ export default function Analytics() {
         <Reveal>
           <div className="panel p-7 flex flex-col items-center justify-center text-center">
             <span className="kicker text-fog mb-4">Overall Plan Progress</span>
-            <Ring pct={p.overall} color="#5fb0ff" size={172} sub="4y · 25 co" />
+            <Ring pct={p.overall} color="#5fb0ff" size={172} sub="4y · 44 co" />
             <p className="text-[11px] text-fog mt-5 max-w-[190px] leading-relaxed">
               Weighted: build 23 · CP 18 · queue 13 · math 13 · dossiers 12 · plan 12 · time 9
             </p>

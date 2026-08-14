@@ -21,7 +21,7 @@ export default function CommandCenter() {
   const day = dayNumber(state.startDate);
   const q = QUARTERS[qi];
   const streaks = state.startDate
-    ? ["cf", "math", "deep"].map((id) => habitStreak(state.habitLog, id))
+    ? ["archaeology", "godbolt", "zetamac"].map((id) => habitStreak(state.habitLog, id))
     : [0, 0, 0];
   const bestStreak = Math.max(...streaks, 0);
 
@@ -90,7 +90,7 @@ export default function CommandCenter() {
             </h1>
             <p className="mt-5 text-fog text-[15px] leading-relaxed max-w-lg">
               Single goal: <span className="text-snow font-semibold">get hired by a giant.</span>{" "}
-              <span className="mono text-mist">4 years · 25 target companies · 16 quarters · 9 projects.</span>{" "}
+              <span className="mono text-mist">4 years · 44 target companies · 5 domains · 9 projects.</span>{" "}
               Every track below traces to a named company&rsquo;s interview screen.
             </p>
           </Reveal>
@@ -201,7 +201,7 @@ export default function CommandCenter() {
               {[
                 { k: "BEST STREAK", v: `${bestStreak}d`, c: "#ff7849" },
                 { k: "EXPENSES", v: `$${expLow}–${expHigh}`, c: "#6fdd8b" },
-                { k: "COMPANIES", v: "25", c: "#45c8e8" },
+                { k: "COMPANIES", v: "44", c: "#45c8e8" },
               ].map((s) => (
                 <div key={s.k} className="rounded-md border border-edge bg-deep/60 px-3 py-2.5 text-center">
                   <div className="display font-bold text-lg" style={{ color: s.c }}>{s.v}</div>
@@ -282,7 +282,7 @@ export default function CommandCenter() {
           </div>
         </div>
         <div className="flex justify-between mt-2">
-          <span className="kicker text-[9px] text-fog/60">25 target companies — every pipeline mapped</span>
+          <span className="kicker text-[9px] text-fog/60">44 target companies · 5 domains — every pipeline mapped</span>
           <span className="kicker text-[9px] text-fog/60">apply window: jun 2030</span>
         </div>
       </Reveal>

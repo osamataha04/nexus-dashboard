@@ -82,7 +82,7 @@ export default function App() {
                   <span className="display font-bold text-xl text-snow tracking-tight">NEXUS</span>
                 </div>
                 <p className="mono text-[10.5px] text-fog mt-3 leading-relaxed max-w-md">
-                  one goal · get hired by a giant · 4 years · 25 companies · every task traces to a named interview screen. State lives in your browser — nothing leaves this machine.
+                  one goal · get hired by a giant · 4 years · 44 companies · 5 domains · every task traces to a named interview screen. State lives in your browser — nothing leaves this machine.
                 </p>
               </div>
               <div className="flex items-center gap-6">

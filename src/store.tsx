@@ -37,7 +37,7 @@ const defaults = (): NexusState => ({
   activated: false,
   trackDone: Object.fromEntries(TRACKS.map((t) => [t.id, 0])),
   habitLog: {},
-  projects: Object.fromEntries(PROJECTS.map((p) => [p.id, p.id === "atlas" ? 35 : 0])),
+  projects: Object.fromEntries(PROJECTS.map((p) => [p.id, 0])),
   cp: { rating: 0, cf: 0, lc: 0, contests: [], topics: {} },
   math: Object.fromEntries(MATH_SUBJECTS.map((s) => [s.id, { lectures: 0, problems: 0 }])),
   checklists: Object.fromEntries(COMPANIES.map((c) => [c.id, c.checklist.map(() => false)])),
