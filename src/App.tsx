@@ -9,6 +9,7 @@ import SkillTrack from "./components/SkillTrack";
 import Finance from "./components/Finance";
 import Companies from "./components/Companies";
 import TodoList from "./components/TodoList";
+import ResourceLibrary from "./components/ResourceLibrary";
 import { Icon } from "./components/ui";
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { err: string }> {
@@ -71,6 +72,7 @@ export default function App() {
           <Finance />
           <Companies />
           <TodoList />
+          <ResourceLibrary />
 
           <footer className="border-t border-edge py-10 mb-4">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">

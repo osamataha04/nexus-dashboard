@@ -50,7 +50,7 @@ const defaults = (): NexusState => ({
   planIssued: [],
 });
 
-const KEY = "nexus-state-v1";
+const KEY = "nexus-state-v2";
 
 const merge = (raw: unknown): NexusState => {
   const d = defaults();

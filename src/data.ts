@@ -180,57 +180,75 @@ export const PROJECTS: Project[] = [
 export type Cat = { id: string; label: string; color: string; icon: string };
 
 export const CATS: Cat[] = [
-  { id: "Engineering", label: "Engineering", color: "#ffb224", icon: "cube" },
-  { id: "Math", label: "Math", color: "#b48cff", icon: "sigma" },
-  { id: "CP", label: "CP", color: "#ff5c7a", icon: "code" },
-  { id: "Income", label: "Income", color: "#6fdd8b", icon: "dollar" },
-  { id: "Application", label: "Application", color: "#45c8e8", icon: "briefcase" },
-  { id: "Admin", label: "Admin", color: "#8e9cc0", icon: "list" },
+  { id: "python", label: "Python / CS61A", color: "#ffb224", icon: "code" },
+  { id: "htdp", label: "HtDP Logic Sandbox", color: "#2fd6b5", icon: "cube" },
+  { id: "rosen", label: "Rosen Discrete Math", color: "#b48cff", icon: "sigma" },
+  { id: "cp-theory", label: "CP Theory", color: "#5fb0ff", icon: "target" },
+  { id: "cp-exec", label: "CP Execution", color: "#ff5c7a", icon: "bolt" },
+  { id: "tools", label: "Tools / Projects", color: "#45c8e8", icon: "list" },
+  { id: "income", label: "Income (RLHF)", color: "#6fdd8b", icon: "dollar" },
 ];
 
-/* weekday → skills the day addresses (0 = Sunday) */
+/* weekday → engine tracks the day addresses (0 = Sunday) — all six daily, rotated in pairs */
 export const WEEK_SETS: string[][] = [
-  ["Admin"],
-  ["Engineering", "CP"],
-  ["Math", "Engineering"],
-  ["CP", "Income"],
-  ["Engineering", "Math"],
-  ["CP", "Application"],
-  ["Engineering", "Income"],
+  ["tools", "income"],
+  ["python", "rosen"],
+  ["htdp", "cp-theory"],
+  ["python", "cp-exec"],
+  ["rosen", "income"],
+  ["cp-theory", "python"],
+  ["cp-exec", "tools"],
 ];
 
 export type BankTask = { id: string; cat: string; title: string; detail: string };
 
 export const TASK_BANK: BankTask[] = [
-  { id: "eng-1", cat: "Engineering", title: "6.100L / CS61A — today's lecture batch + finger exercises", detail: "Watch the scheduled lectures at 1.5×, read the matching Guttag/SICP section first, then complete every finger exercise closed-book. Afterward, push your solutions to NEXUS-Y1 with a commit message that explains one thing you learned — visibility is a tracked hour, not an afterthought." },
-  { id: "eng-2", cat: "Engineering", title: "Helsinki MOOC — complete this week's exercise batch", detail: "Every exercise in the batch must pass the automated checker. This is where raw Python skill is built — no skipping to the solution. After finishing, read 2–3 community solutions to one problem and note what they knew that you didn't." },
-  { id: "eng-3", cat: "Engineering", title: "HtDP Design Recipe drill — one data definition end-to-end", detail: "Pick one data definition and run the full 6-step recipe: signature, examples, template, function, tests, review. Write the template BEFORE the function. This rewires structural thinking — the same pattern becomes your Scheme eval in Q3." },
-  { id: "eng-4", cat: "Engineering", title: "CS61A project session — advance the current project one phase", detail: "Work the active 61A project (Hog / Cats / Ants / interpreter) for one focused 90-minute phase. Define done-criteria before starting: which autograder tests pass when you stop. Commit with a meaningful message, not 'update'." },
-  { id: "eng-5", cat: "Engineering", title: "python-dsa / cf-tracker — one tested component", detail: "Implement one data structure or feature (linked list, stack, BST, hash table — or the CF API client, JSON persistence). Write pytest tests first or immediately after. Sanitizers and type hints on. Push to GitHub with a README update." },
-  { id: "eng-6", cat: "Engineering", title: "Recursion / interpreter deep-work block", detail: "The most important concept of the quarter. Implement one of: recursive evaluator, TCO trampoline, Frame model lookup — from scratch, then step through it in Python Tutor. If you can't explain the call stack out loud, it's not done." },
+  /* ── Python / CS61A (3.5h engine block) ── */
+  { id: "py-1", cat: "python", title: "6.100L / CS61A — today's lecture batch + finger exercises", detail: "Watch the scheduled lectures at 1.5×, read the matching Guttag / Composing Programs section first, then complete every finger exercise closed-book. Push your solutions to NEXUS-Y1 with a commit message that explains one thing you learned — visibility is a tracked hour, not an afterthought." },
+  { id: "py-2", cat: "python", title: "Helsinki MOOC — complete this week's exercise batch", detail: "Every exercise in the batch must pass the automated checker. This is where raw Python skill is built — no skipping to the solution. After finishing, read 2–3 community solutions to one problem and note what they knew that you didn't." },
+  { id: "py-3", cat: "python", title: "CS61A project session — advance the current project one phase", detail: "Work the active 61A project (Hog / Cats / Ants / Scheme interpreter) for one focused 90-minute phase. Define done-criteria before starting: which autograder tests pass when you stop. Commit with a meaningful message, not 'update'." },
+  { id: "py-4", cat: "python", title: "Calculator interpreter — tokenize → parse → eval → apply", detail: "The warm-up for the final Scheme interpreter. Build each stage separately against tiny inputs, then wire them. Draw the 4 components on paper first (Reader, Environment, Evaluator, Apply) — the same architecture you'll prototype with a Thunk sentinel and trampoline loop for TCO in week 10." },
+  { id: "py-5", cat: "python", title: "Recursion / TCO deep-work block", detail: "The most important concept of the quarter. Implement one of: recursive evaluator, trampoline loop with Thunk sentinels, Frame model lookup — from scratch, then step through it in Python Tutor. If you can't explain the call stack out loud, it's not done." },
+  { id: "py-6", cat: "python", title: "Testing pass — pytest ≥ 80% coverage on this week's code", detail: "Write tests before or immediately after each function, never as an afterthought. Add fixtures and parametrization where a function has edge cases (empty input, single element, deep recursion). Run mypy clean. This is the Google code-review standard applied from week 1." },
 
-  { id: "math-1", cat: "Math", title: "Rosen — today's chapter section + warm-ups", detail: "Read the scheduled section (logic, proofs, induction, counting, relations, or graphs) BEFORE attempting problems. Do every warm-up. For each proof technique used, write a one-line Anki card: technique + when to reach for it." },
-  { id: "math-2", cat: "Math", title: "Proof reconstruction — one proof from memory", detail: "Close the book. Reproduce one proof from this week (induction, contradiction, or a counting argument) fully on paper. Check against Rosen and note exactly where your reasoning diverged. This is the Level-1 bar of the deep-understanding test." },
-  { id: "math-3", cat: "Math", title: "Unseen-problem transfer set — 3 problems never done before", detail: "Take 3 problems from an MIT 6.042J past exam or Rosen's end-of-chapter set that you have never seen. Attempt each 15 minutes before checking anything. Solving unseen problems is the definition of understanding — memorized examples don't count." },
-  { id: "math-4", cat: "Math", title: "Math → code bridge — implement today's concept", detail: "Implement the current topic in Python: Euclidean algorithm, modular exponentiation (fast power), a hash map from buckets, or BFS over an adjacency list. 100 lines max, with 3+ test cases. This is the number-theory-to-CP-pipeline made physical." },
+  /* ── HtDP Logic Sandbox (2h engine block) ── */
+  { id: "ht-1", cat: "htdp", title: "HtDP Design Recipe — one data definition end-to-end", detail: "Run the full 6-step recipe: signature, purpose, examples, template, function, tests. Write the template BEFORE the function. This rewires structural thinking — the same pattern becomes your Scheme eval in the interpreter weeks." },
+  { id: "ht-2", cat: "htdp", title: "HtDP — arbitrarily large data: recursive data definitions", detail: "Map one recursive data definition directly to a recursive function structure (lists, natural numbers, trees). One self-reference per self-reference in the data — no more, no less. Test with a base case and at least two recursive depths." },
+  { id: "ht-3", cat: "htdp", title: "HtDP — abstraction: build a higher-order function", detail: "Take two structurally identical recursive functions you wrote this week and fold the difference into a parameter. If you can't name the abstraction, you haven't found it yet. This is the exact move SICP makes in weeks 5–6." },
+  { id: "ht-4", cat: "htdp", title: "HtDP — intertwined data: trees + mutual recursion", detail: "Implement one mutually recursive pair (e.g. expression trees with two node types). Trace both functions on paper for one input before coding. This is the AST shape your Scheme interpreter will use." },
 
-  { id: "cp-1", cat: "CP", title: "CF batch — 7 problems at the current rating band", detail: "Solve 7 problems at the week's target rating (800 → 1300 as the quarter progresses). Before submitting each, estimate its time complexity out loud — never submit without knowing the complexity. Log every problem in Problems-Log.md with pattern + failure reason." },
-  { id: "cp-2", cat: "CP", title: "Live rated round — full contest conditions", detail: "Enter today's Div.3/Div.4 round at real time-box, no pauses. Simulate pressure: one submission per problem mindset, penalty awareness. Afterward, upsolve at least one problem above your solved ceiling before sleeping." },
-  { id: "cp-3", cat: "CP", title: "Technique drill — the week's named algorithm", detail: "Drill the scheduled technique (prefix sums, two-pointer, binary search variants, greedy, DP, BFS/DFS, graphs): read the cp-algorithms.com page, then solve 3–5 problems that use only that technique. Add one template snippet to your library with a usage note." },
-  { id: "cp-4", cat: "CP", title: "USACO block — one complete-search/simulation set", detail: "Complete one USACO Bronze (later Silver) problem set end-to-end. These are implementation-heavy — the exact muscle for HRT's 'correctness under pressure' superday. Time yourself; brute force first, optimize only with a measured reason." },
+  /* ── Rosen Discrete Math (1.5h engine block) ── */
+  { id: "ro-1", cat: "rosen", title: "Rosen — today's chapter section + warm-ups", detail: "Read the scheduled section (logic, proofs, induction, counting, relations, or graphs) BEFORE attempting problems. Do every warm-up. For each proof technique used, write a one-line Anki card: technique + when to reach for it." },
+  { id: "ro-2", cat: "rosen", title: "Proof reconstruction — one proof from memory", detail: "Close the book. Reproduce one proof from this week (induction, contradiction, or a counting argument) fully on paper. Check against Rosen and note exactly where your reasoning diverged. This is the Level-1 bar of the deep-understanding test." },
+  { id: "ro-3", cat: "rosen", title: "Unseen-problem transfer set — 3 problems never done before", detail: "Take 3 problems from a 6.042J past exam or Rosen's end-of-chapter set you have never seen. Attempt each 15 minutes before checking anything. Solving unseen problems is the definition of understanding — memorized examples don't count." },
+  { id: "ro-4", cat: "rosen", title: "Math → code bridge — implement today's concept", detail: "Implement the current topic in Python: Euclidean algorithm, modular exponentiation (fast power), a hash map from buckets, or BFS over an adjacency list. 100 lines max, with 3+ test cases. This is the number-theory-to-CP pipeline made physical." },
+  { id: "ro-5", cat: "rosen", title: "Rosen summary sheets + Anki consolidation", detail: "Produce one-page summary sheets for every chapter covered so far, from memory first, then fill gaps. Check Anki metrics — again-queue >20% means slow down and consolidate; <5% means you can add more cards." },
 
-  { id: "inc-1", cat: "Income", title: "RLHF platforms — one onboarding step or task batch", detail: "Advance the RLHF pipeline one concrete step: finish an onboarding assessment, claim and complete a task batch on Outlier/DataAnnotation/Mercor, or register one more platform (Prolific accepts Egypt). Track hours and rate in the runway sheet — the C/C++ specialist tier ($75–135/hr) unlocks once your C is solid." },
-  { id: "inc-2", cat: "Income", title: "Mostaql / Upwork — 5 tailored micro-freelance proposals", detail: "Send 5 proposals for Python automation / Excel scripting / data extraction gigs aimed at Egyptian & Arab small businesses. Each proposal: 2 sentences proving you read the brief + one relevant GitHub link. Log all 5 with follow-up dates." },
-  { id: "inc-3", cat: "Income", title: "Runway sheet — update income vs Asyut burn", detail: "Log this month's actual income against the $230–375/mo Asyut baseline. Recompute months-of-runway and the delta to the $600–900 buffer target (family support ends May 2027 — the buffer must be built from RLHF income by March 2027). Write one line: the single highest-leverage income action for next week." },
-  { id: "inc-4", cat: "Income", title: "GSoC / Outreachy — one contribution or application step", detail: "Move the stipend pipeline forward: claim a beginner-friendly issue on a target org's repo, submit a small PR, or draft one section of the application. GSoC $3–6.6k / Outreachy $7k are one-time but real — the deadline calendar is in the quarter brief." },
+  /* ── CP Theory (1.5h engine block) ── */
+  { id: "ct-1", cat: "cp-theory", title: "CPH / CP4 reading — this week's technique chapters", detail: "Read the scheduled Competitive Programmer's Handbook chapters (1–4 foundations, 5 greedy, 7 DP, 11–12 graphs) with a pen: write the one-sentence essence of each technique and the problem shape that triggers it. Theory before grinding — pattern recognition is the asset." },
+  { id: "ct-2", cat: "cp-theory", title: "Technique drill — the week's named algorithm", detail: "Drill the scheduled technique (prefix sums, two-pointer, binary search variants, greedy, DP, BFS/DFS, graphs): read the cp-algorithms.com page, then solve 3–5 problems using only that technique. Add one template snippet to your library with a usage note." },
+  { id: "ct-3", cat: "cp-theory", title: "USACO block — one complete-search / simulation set", detail: "Complete one USACO Bronze (later Silver) problem set end-to-end. These are implementation-heavy — the exact muscle for HRT's 'correctness under pressure' superday. Time yourself; brute force first, optimize only with a measured reason." },
+  { id: "ct-4", cat: "cp-theory", title: "Memory test — 7 core algorithms from scratch", detail: "Write binary search, BFS/DFS, merge sort, GCD, sieve of Eratosthenes, and union-find entirely from memory, under 10 minutes each. This is the week-13 gate before Q2 — anything that stalls gets re-drilled this week, not next quarter." },
 
-  { id: "app-1", cat: "Application", title: "Dossier — build one company's intelligence file", detail: "Pick the next company in the queue. Fill: interview process stages, what passes and what fails there, the project of yours that maps to their stack, and the domain checklist items you still owe. Tick checklist boxes only where genuinely verified — never aspirationally." },
-  { id: "app-2", cat: "Application", title: "Cocktail Party Test — explain one project in plain language", detail: "Explain your latest project to an imagined non-engineer in one paragraph, out loud, timed 2 minutes. Then do it again as a 5-minute system-design answer: components, trade-offs, failure modes. This is the behavioral-narration habit — 4 years deep by application time, per the plan." },
-  { id: "app-3", cat: "Application", title: "STAR story — write one from real NEXUS work", detail: "Write one STAR answer (≤120 words) from real work: 'hard bug' = a debugger session, 'performance' = a benchmark you ran, 'system designed' = python-dsa or the interpreter. The metric goes in the Result. Read it aloud twice — it must sound spoken." },
+  /* ── CP Execution (1.5h engine block) ── */
+  { id: "ce-1", cat: "cp-exec", title: "CF batch — problems at the current rating band", detail: "Solve today's batch at the week's target rating (800 → 1300 as the quarter progresses, toward 210 cumulative). Before submitting each, estimate its time complexity out loud — never submit without knowing the complexity. Log pattern + failure reason in Problems-Log.md." },
+  { id: "ce-2", cat: "cp-exec", title: "Live rated round — full contest conditions", detail: "Enter today's Div.4/Div.3 round (later Div.2 A) at real time-box, no pauses. Simulate pressure: one submission per problem mindset, penalty awareness. Afterward, upsolve at least one problem above your solved ceiling before sleeping." },
+  { id: "ce-3", cat: "cp-exec", title: "CF sprint checkpoint — hit the cumulative ladder", detail: "Check your cumulative count against the ladder: 20 → 42 → 64 → 86 (Bronze done) → 107 → 128 → 142 → 158 → 170 → 180 (first Div.2 A) → 210 with rating 900+. If behind, take the delta as extra problems this block — the ladder is the contract." },
+  { id: "ce-4", cat: "cp-exec", title: "Upsolve session — last round's unsolved problems", detail: "Every problem you didn't solve in the last rated round gets solved today, including one above your rating. Write a 3-line summary per problem: the key observation, the implementation pitfall, the tag. Upsolving is where rating actually moves." },
 
-  { id: "adm-1", cat: "Admin", title: "Sunday review — close the week honestly", detail: "Run the review: queue completion % per track, CF delta (rating + problems + upsolves), money logged, one unfinished task moved to Monday, and the 3 non-negotiables for next week. Write the single sentence that summarizes the week. 30 minutes, no more." },
-  { id: "adm-2", cat: "Admin", title: "Three-level self-assessment — Sunday ritual", detail: "Level 1 Recall: write one concept from scratch, closed-book. Level 2 Transfer: solve one unseen problem. Level 3 Teach: one-paragraph Feynman explanation in the vault. Then check Anki metrics — again-queue >20% means slow down; <5% means add more cards." },
-  { id: "adm-3", cat: "Admin", title: "Backup + tidy the system", detail: "Export a NEXUS backup, push NEXUS-Y1 to git, file loose notes into the Obsidian vault (Engineering / Math / CP / Journal / HiddenGaps), and read tomorrow's skill set here so tomorrow-you starts in 30 seconds, not 10 minutes." },
+  /* ── Income / RLHF (variable, outside the 12h engine) ── */
+  { id: "in-1", cat: "income", title: "RLHF platforms — one onboarding step or task batch", detail: "Advance the RLHF pipeline one concrete step: finish an onboarding assessment, claim and complete a task batch on Outlier / DataAnnotation / Mercor, or register one more platform (Prolific accepts Egypt). Track hours and rate in the runway sheet — the C/C++ specialist tier ($75–135/hr) unlocks once your C is solid." },
+  { id: "in-2", cat: "income", title: "Mostaql / Upwork — 5 tailored micro-freelance proposals", detail: "Send 5 proposals for Python automation / Excel scripting / data extraction gigs aimed at Egyptian & Arab small businesses. Each proposal: 2 sentences proving you read the brief + one relevant GitHub link. Log all 5 with follow-up dates." },
+  { id: "in-3", cat: "income", title: "Runway sheet — update income vs Asyut burn", detail: "Log this month's actual income against the $230–375/mo Asyut baseline. Recompute months-of-runway and the delta to the $600–900 buffer target (family support ends May 2027 — the buffer must be built from RLHF income by March 2027). Write one line: the single highest-leverage income action for next week." },
+  { id: "in-4", cat: "income", title: "GSoC / Outreachy — one contribution or application step", detail: "Move the stipend pipeline forward: claim a beginner-friendly issue on a target org's repo, submit a small PR, or draft one section of the application. GSoC $3–6.6k / Outreachy $7k are one-time but real — the deadline calendar is in the quarter brief." },
+
+  /* ── Tools / Projects (1.5h engine block + review) ── */
+  { id: "to-1", cat: "tools", title: "python-dsa / cf-tracker — one tested component", detail: "Implement one data structure or feature (linked list, stack, BST, hash table — or the CF API client, JSON persistence). Write pytest tests first or immediately after. Type hints on, mypy clean. Push to GitHub with a README update — every project gets a real benchmark number, never just 'implemented'." },
+  { id: "to-2", cat: "tools", title: "Toolchain block — WSL2 / git terminal / pdb / mypy", detail: "One concrete tooling upgrade per session: get comfortable in WSL2, drive git from the terminal only (no GUI), debug with pdb breakpoints, or enforce type hints with mypy. Tool fluency is what makes the other 10.5 hours faster." },
+  { id: "to-3", cat: "tools", title: "Code review practice — 5 open-source Python functions", detail: "Review 5 open-source Python functions for correctness, efficiency, and edge cases — out loud, as if commenting on a colleague's CL. This is direct prep for RLHF code-evaluation applications and for the Google-style review checklist you apply to your own code." },
+  { id: "to-4", cat: "tools", title: "GitHub cleanup — pin, document, test every repo", detail: "Every repo (python-dsa, scheme-interpreter, cf-tracker, NEXUS-Y1) gets: a README that explains what it does and how to run it, passing tests, and a meaningful commit history. Pinned repos are your resume before the resume exists." },
+  { id: "to-5", cat: "tools", title: "Sunday review — close the week honestly", detail: "Run the review: queue completion % per track, CF delta (rating + problems + upsolves), money logged, one unfinished task moved to Monday, and the 3 non-negotiables for next week. Write the single sentence that summarizes the week. 30 minutes, no more." },
+  { id: "to-6", cat: "tools", title: "Three-level self-assessment + backup", detail: "Level 1 Recall: write one concept from scratch, closed-book. Level 2 Transfer: solve one unseen problem. Level 3 Teach: one-paragraph Feynman explanation in the vault. Then export a NEXUS backup and push NEXUS-Y1 to git — nothing lost, ever." },
 ];
 
 /* ── the 16 quarters ───────────────────────────────────────────────── */
@@ -686,12 +704,168 @@ export const NEGOTIATIONS = [
 
 /* ── AI parse preview (current quarter: Y1 Q1) ─────────────────────── */
 export const PARSED_PREVIEW = [
-  { track: "Engineering", task: "MIT 6.100L L1–6 + Helsinki Part 1 exercises 1–10", priority: "High" },
-  { track: "CP", task: "5 CF problems rated 800 — Codeforces account live", priority: "High" },
-  { track: "Math", task: "Rosen 1.1–1.6 — logic equivalences + rules of inference", priority: "Medium" },
-  { track: "Engineering", task: "NEXUS-Y1 repo created + README committed in English", priority: "Medium" },
-  { track: "Income", task: "Register: Outlier + DataAnnotation + Prolific (accepts Egypt)", priority: "Medium" },
-  { track: "Admin", task: "Obsidian vault + Anki decks: 6.100L · Rosen · CP Patterns", priority: "Low" },
+  { track: "Python / CS61A", task: "MIT 6.100L L1–6 + Helsinki Part 1 exercises 1–10", priority: "High" },
+  { track: "CP Execution", task: "5 CF problems rated 800 — Codeforces account live", priority: "High" },
+  { track: "Rosen Discrete Math", task: "Rosen 1.1–1.6 — logic equivalences + rules of inference", priority: "Medium" },
+  { track: "Tools / Projects", task: "NEXUS-Y1 repo created + README committed in English", priority: "Medium" },
+  { track: "Income (RLHF)", task: "Register: Outlier + DataAnnotation + Prolific (accepts Egypt)", priority: "Medium" },
+  { track: "Tools / Projects", task: "Obsidian vault + Anki decks: 6.100L · Rosen · CP Patterns", priority: "Low" },
+];
+
+/* ── 09 · resource library (csdiy.wiki taxonomy, plan-anchored) ─────── */
+export type ResCourse = {
+  code: string;
+  name: string;
+  level: "Foundation" | "Core" | "Advanced";
+  url: string;
+  inPlan?: string;
+  note: string;
+};
+export type ResCategory = { id: string; label: string; cn: string; color: string; courses: ResCourse[] };
+export type ResBook = { title: string; author: string; inPlan?: string; note: string };
+
+const csdiy = (cat: string, slug: string) => `https://csdiy.wiki/en/${encodeURIComponent(cat)}/${encodeURIComponent(slug)}/`;
+
+export const RES_CATEGORIES: ResCategory[] = [
+  {
+    id: "intro", label: "Programming Intro", cn: "编程入门", color: "#ffb224",
+    courses: [
+      { code: "MIT 6.100L", name: "Intro to CS & Programming Using Python", level: "Foundation", url: "https://ocw.mit.edu/courses/6-100l-introduction-to-cs-and-programming-using-python-fall-2022/", inPlan: "Y1 Q1 · wks 1–4", note: "26 lectures + finger exercises + PSets 1–5. Guttag companion textbook, chapter-per-lecture." },
+      { code: "Helsinki MOOC", name: "Programming in Python (Parts 1–4)", level: "Foundation", url: "https://programming-23.mooc.fi/", inPlan: "Y1 Q1", note: "Plan-only (~95 exercises, all must pass the checker) — not on csdiy. Where raw Python skill is built." },
+      { code: "CS61A", name: "Structure & Interpretation of Computer Programs", level: "Foundation", url: "https://cs61a.org/", inPlan: "Y1 Q1 · wks 5–13", note: "HOF, environments, data abstraction → the Calculator + Scheme interpreters with TCO. Composing Programs textbook." },
+      { code: "CS50P", name: "CS50's Introduction to Programming with Python", level: "Foundation", url: csdiy("编程入门", "Python/CS50P"), note: "Complementary — a gentler on-ramp if 6.100L moves too fast in week 1." },
+      { code: "CS3110", name: "Cornell — Functional Programming (OCaml)", level: "Core", url: csdiy("编程入门", "Functional/CS3110"), inPlan: "Y2 Q4 (4-wk basics)", note: "The full version of the Jane Street language track; the plan runs a 4-week subset (types, functors, a parser)." },
+      { code: "CS50", name: "Harvard CS50 (C track)", level: "Foundation", url: csdiy("编程入门", "C/CS50"), note: "Complementary — the plan learns C from K&R directly instead." },
+      { code: "Missing Semester", name: "MIT — The Missing Semester of Your CS Education", level: "Foundation", url: "https://missing.csail.mit.edu/", inPlan: "Y1 Q1 · wks 1–2", note: "Shell, vim, git, data wrangling. Lectures 1–6 mandatory, exercises not optional." },
+    ],
+  },
+  {
+    id: "math", label: "Math Foundations & Advanced", cn: "数学基础 · 数学进阶", color: "#b48cff",
+    courses: [
+      { code: "6.042J", name: "Mathematics for Computer Science (Demaine/Leighton)", level: "Foundation", url: csdiy("数学进阶", "6.042J"), inPlan: "Y1 Q1–Q2", note: "Lectures 1–13 in Q1 with the MCS textbook (read before each lecture). Leighton's 2010 classics as the when-stuck supplement." },
+      { code: "Rosen", name: "Discrete Mathematics & Its Applications", level: "Foundation", url: csdiy("数学进阶", "6.042J"), inPlan: "Y1 Q1 · daily 1.5h", note: "The 12-hour engine's math block: Ch.1 logic → Ch.5 induction → Ch.9 relations → Ch.10 counting, with proof reconstruction ritual." },
+      { code: "MIT 18.06", name: "Linear Algebra (Strang)", level: "Core", url: csdiy("数学基础", "MITLA"), inPlan: "Y2 · full", note: "The NVIDIA / DeepMind / Databricks AI-Infra math gate. First half Y2 Q2, SVD/PCA/eigenvalues by Y2 Q3." },
+      { code: "MIT 18.01/18.02", name: "Calculus I–II + Multivariable", level: "Core", url: csdiy("数学基础", "MITmaths"), inPlan: "Y1 Q2 → Y3", note: "The HFT prerequisite chain: Calc I (Y1 Q2), Calc II series (Y2 Q1), multivariable (Y3 Q1)." },
+      { code: "Convex Opt", name: "Convex Optimization (core: GD, duality)", level: "Advanced", url: csdiy("数学进阶", "convex"), inPlan: "Y4 Q2 · 3 weeks", note: "DeepMind / Databricks AI-Infra. Core only — GD convergence, duality, proximal operators." },
+      { code: "MacKay ITPRNN", name: "Information Theory, Pattern Recognition & Neural Networks", level: "Advanced", url: csdiy("数学进阶", "The_Information_Theory_Pattern_Recognition_and_Neural_Networks"), inPlan: "Y4 Q3 · 4 weeks", note: "The DeepMind ML-depth signal in their domain round: entropy, KL divergence, mutual information." },
+      { code: "CS70", name: "Berkeley — Discrete Math & Probability Theory", level: "Core", url: csdiy("数学进阶", "CS70"), note: "Complementary — a second angle on probability before the Y1–Y2 Probability I/II sequence." },
+    ],
+  },
+  {
+    id: "dsa", label: "Data Structures & Algorithms", cn: "数据结构与算法", color: "#ff5c7a",
+    courses: [
+      { code: "CPH / CP4", name: "Competitive Programmer's Handbook / CP4 Book 1", level: "Core", url: "https://cses.fi/book/book.pdf", inPlan: "Y1 Q1 → Y2", note: "The plan's theory spine: Ch.1–4 foundations, 5 greedy, 7 DP, 11–12 graphs — paired with the 20→210 CF ladder." },
+      { code: "CS61B", name: "Berkeley — Data Structures", level: "Core", url: csdiy("数据结构与算法", "CS61B"), note: "Complementary — the plan covers this ground via python-dsa (week 4) + USACO + CP instead." },
+      { code: "MIT 6.006", name: "Introduction to Algorithms", level: "Core", url: csdiy("数据结构与算法", "6.006"), note: "Complementary reference for the algorithm-analysis gaps Big-O weeks surface." },
+      { code: "MIT 6.046 / CS170", name: "Design & Analysis of Algorithms", level: "Advanced", url: csdiy("数据结构与算法", "6.046"), note: "Complementary — for the HRT-tier hard-graph and DP depth beyond CF 1800." },
+    ],
+  },
+  {
+    id: "systems", label: "Systems Foundations & Architecture", cn: "系统基础 · 体系结构", color: "#45c8e8",
+    courses: [
+      { code: "Nand2Tetris", name: "N2T Part 1 — logic gates to CPU", level: "Foundation", url: csdiy("体系结构", "N2T"), inPlan: "Y1 Q4 · 8h/wk", note: "NVIDIA hardware-software interface + Apple hardware empathy. CPU implemented by quarter end." },
+      { code: "CSAPP", name: "CMU 15-213 — Computer Systems: A Programmer's Perspective", level: "Core", url: csdiy("计算机系统基础", "CSAPP"), note: "Complementary — the classic; the plan's Handmade Hero + K&R + syscalls block covers adjacent ground." },
+      { code: "CS61C", name: "Berkeley — Great Ideas in Computer Architecture", level: "Core", url: csdiy("体系结构", "CS61C"), note: "Complementary — Godbolt/assembly-empathy habit made systematic; pairs with the SIMD weeks in Y3–Y4." },
+      { code: "DDCA", name: "Digital Design & Computer Architecture", level: "Foundation", url: csdiy("体系结构", "DDCA"), note: "Complementary backup reading alongside Nand2Tetris." },
+    ],
+  },
+  {
+    id: "os", label: "Operating Systems", cn: "操作系统", color: "#2fd6b5",
+    courses: [
+      { code: "MIT 6.S081", name: "xv6 Operating Systems Engineering", level: "Core", url: csdiy("操作系统", "MIT6.S081"), inPlan: "Y2 Q3 · 14h/wk", note: "The plan's xv6 quarter — scheduler, VM, FS + a custom modification, LLDB as primary debugger. This course IS the Y2 Q3 project." },
+      { code: "CS162", name: "Berkeley — Operating Systems", level: "Advanced", url: csdiy("操作系统", "CS162"), note: "Complementary second angle after xv6; threads/synchronization depth for the C++ concurrency quarter." },
+      { code: "NJU OS", name: "Nanjing University — Operating Systems (Jiang Yanyan)", level: "Core", url: csdiy("操作系统", "NJUOS"), note: "Complementary — concurrent-programming perspective; useful alongside the SPSC queue work." },
+    ],
+  },
+  {
+    id: "net", label: "Computer Networks", cn: "计算机网络", color: "#5fb0ff",
+    courses: [
+      { code: "CS144", name: "Stanford — Computer Networking (TCP from scratch)", level: "Core", url: csdiy("计算机网络", "CS144"), inPlan: "Y3 Q1 · 16h/wk", note: "The plan's TCP/IP stack in C++ — handshake, sliding window, retransmission, congestion control, benchmarked. CS144 is the canonical companion." },
+      { code: "Top-Down", name: "Kurose & Ross — Networking: A Top-Down Approach", level: "Foundation", url: csdiy("计算机网络", "topdown"), note: "Complementary theory text to read around the stack build." },
+      { code: "CS168", name: "Berkeley — Introduction to the Internet", level: "Advanced", url: csdiy("计算机网络", "CS168"), note: "Complementary — routing/distributed-systems-flavored depth." },
+    ],
+  },
+  {
+    id: "db", label: "Database Systems", cn: "数据库系统", color: "#6fdd8b",
+    courses: [
+      { code: "CMU 15-445", name: "Database Systems (BusTub)", level: "Core", url: csdiy("数据库系统", "15445"), inPlan: "Y3 Q2–Q3", note: "The direct companion to the SQL Storage Engine: B+ tree + WAL + SIMD vectorized scan + Arrow reader. MVCC/LSM/columnar fluency for ClickHouse, Snowflake, MongoDB." },
+      { code: "CS186", name: "Berkeley — Introduction to Database Systems", level: "Core", url: csdiy("数据库系统", "CS186"), note: "Complementary — query-optimizer theory for the Y3 Q4 rule-based optimizer." },
+      { code: "CMU 15-799", name: "Special Topics: Streaming/ML Databases", level: "Advanced", url: csdiy("数据库系统", "15799"), note: "Complementary post-ship reading once the engine is benchmarked." },
+    ],
+  },
+  {
+    id: "dist", label: "Parallel & Distributed Systems", cn: "并行与分布式系统", color: "#ff7849",
+    courses: [
+      { code: "CS149", name: "Stanford — Parallel Computing", level: "Core", url: csdiy("并行与分布式系统", "CS149"), inPlan: "Y4 Q2 · 16h/wk", note: "The CUDA quarter's theory home: coalescing, occupancy, bank conflicts — the single most-tested NVIDIA skill, with roofline analysis." },
+      { code: "MIT 6.824", name: "Distributed Systems (Raft labs)", level: "Core", url: csdiy("并行与分布式系统", "MIT6.824"), inPlan: "Y3 Q3", note: "Pairs with the Go Raft KV store — log replication, leader election, linearizability tests. The Snowflake/MongoDB/CockroachDB door." },
+    ],
+  },
+  {
+    id: "pl", label: "Compilers & Language Design", cn: "编译原理 · 编程语言", color: "#b48cff",
+    courses: [
+      { code: "CS143", name: "Stanford — Compilers", level: "Core", url: csdiy("编译原理", "CS143"), inPlan: "Y4 Q3–Q4 (Cooper & Torczon)", note: "The plan runs SSA + liveness (Ch.5) then register allocation (Ch.13); CS143 is the hands-on companion for the LLVM-track interviews." },
+      { code: "NJU / PKU Compilers", name: "Compiler courses with full labs", level: "Core", url: csdiy("编译原理", "NJU-Compilers"), note: "Complementary — lab-heavy alternatives when a concept needs a second implementation." },
+      { code: "CS242", name: "UIUC — Programming Language Design & Analysis", level: "Advanced", url: csdiy("编程语言设计与分析", "CS242"), note: "Complementary — type-systems depth that feeds Apple LLVM's type-checking questions." },
+      { code: "Cambridge Semantics", name: "Semantics of Programming Languages", level: "Advanced", url: csdiy("编程语言设计与分析", "Cambridge-Semantics"), note: "Complementary — the Scheme interpreter's formal underpinning, if time allows in Y4." },
+    ],
+  },
+  {
+    id: "mlsys", label: "ML Systems & Deep Learning", cn: "机器学习系统 · 深度学习", color: "#6fdd8b",
+    courses: [
+      { code: "MLC", name: "Machine Learning Compilation (Tianqi Chen)", level: "Core", url: csdiy("机器学习系统", "MLC"), inPlan: "Y4 Q2–Q3 bridge", note: "The Triton-kernels + CUDA quarter's natural theory bridge: tensor IR, scheduling, roofline thinking." },
+      { code: "AICS", name: "CMU 15-849 — AI Infrastructure & Compilers", level: "Advanced", url: csdiy("机器学习系统", "AICS"), note: "Complementary — lands exactly on the AI-Infra target tier's vocabulary." },
+      { code: "CMU 15-442", name: "Machine Learning Systems", level: "Advanced", url: csdiy("机器学习系统", "CMU15-442"), note: "Complementary — feeds the distributed-training design doc (AllReduce, parallelism strategies)." },
+      { code: "Karpathy Zero→Hero", name: "Neural Networks: Zero to Hero", level: "Core", url: csdiy("人工智能", "Neural Networks：Zero to Hero"), inPlan: "Y4 Q3 warm-up", note: "The practical ramp before building the GPT Transformer from scratch with gradient checkpointing." },
+      { code: "CS231n", name: "Stanford — Deep Learning for Vision", level: "Core", url: csdiy("深度学习", "CS231"), note: "Complementary — backprop/autograd mechanics, referenced not required." },
+    ],
+  },
+  {
+    id: "gfx", label: "Computer Graphics", cn: "计算机图形学", color: "#ffb224",
+    courses: [
+      { code: "GAMES101", name: "现代计算机图形学入门 (Yan Lingqi)", level: "Core", url: csdiy("计算机图形学", "GAMES101"), inPlan: "Y4 Q1 companion", note: "Theory for the Vulkan Path Tracer: BVH, ray-sphere intersection, Cook-Torrance BRDF, area lights." },
+      { code: "15-462", name: "CMU — Computer Graphics", level: "Core", url: csdiy("计算机图形学", "15462"), note: "Complementary — GPU-pipeline depth for the NVIDIA domain round." },
+    ],
+  },
+  {
+    id: "se", label: "Software Engineering & Code Quality", cn: "软件工程", color: "#8e9cc0",
+    courses: [
+      { code: "MIT 6.031", name: "Software Construction", level: "Core", url: csdiy("软件工程", "6031"), note: "Complementary — testing/specs discipline that reinforces the Part-3 self-review checklist." },
+      { code: "CS169", name: "Berkeley — Software Engineering", level: "Core", url: csdiy("软件工程", "CS169"), note: "Complementary — design-doc culture in practice; pairs with the 5-section doc standard from Y2 Q1." },
+    ],
+  },
+  {
+    id: "tools", label: "Essential Tools", cn: "必学工具", color: "#45c8e8",
+    courses: [
+      { code: "Git / GitHub", name: "Version control — terminal only", level: "Foundation", url: csdiy("必学工具", "Git"), inPlan: "Y1 Q1 · day 1", note: "NEXUS-Y1 repo, meaningful commits, push via command line from week 2 onward." },
+      { code: "Vim", name: "Editors (Vim)", level: "Foundation", url: csdiy("必学工具", "Vim"), inPlan: "Y1 Q1 · wk 2", note: "Navigate, insert, delete, search, quit — Missing Semester Lec 3, then daily." },
+      { code: "GNU Make / CMake", name: "Build systems", level: "Core", url: csdiy("必学工具", "GNU_Make"), inPlan: "Y1 Q3 (C projects)", note: "Every C/C++ project from K&R onward builds with a real Makefile." },
+      { code: "Docker", name: "Containers + basic AWS", level: "Core", url: csdiy("必学工具", "Docker"), inPlan: "Y2 Q3–Q4 · ~20–30h", note: "Income-stream Category B #1: DevOps-adjacent freelance unlocked ($25–60/hr). Not a detour — applied OS concepts." },
+      { code: "LaTeX", name: "Technical typesetting", level: "Core", url: csdiy("必学工具", "LaTeX"), note: "Complementary — for the design docs and any future preprint work." },
+      { code: "Info Retrieval", name: "Searching like an engineer", level: "Foundation", url: csdiy("必学工具", "信息检索"), note: "Complementary — read once in Y1; Google-fu is a daily multiplier." },
+    ],
+  },
+];
+
+export const RES_OFF_ROADMAP = [
+  "Systems Security (CS161, MIT 6.858, SEED Labs)",
+  "Web Development (CS142, CS571, Full Stack Open)",
+  "Data Science (Berkeley Data100)",
+  "Electronics foundations (EE16A/B)",
+];
+
+export const RES_BOOKS: ResBook[] = [
+  { title: "The C Programming Language (K&R)", author: "Kernighan & Ritchie", inPlan: "Y1 Q3 → Y2 Q1", note: "Ch.1–6 in Q3, complete with all exercises by Y2 Q1. Apple Core OS is non-negotiable about C." },
+  { title: "Introduction to Computation & Programming Using Python", author: "Guttag", inPlan: "Y1 Q1", note: "Chapter-per-lecture companion to MIT 6.100L — more detail than the videos." },
+  { title: "Mathematics for Computer Science (MCS)", author: "Lehman, Leighton, Meyer", inPlan: "Y1 Q1–Q2", note: "Free PDF. Read the chapter BEFORE each 6.042J lecture — mandatory per the plan." },
+  { title: "Discrete Mathematics & Its Applications", author: "Rosen", inPlan: "Y1 Q1 · daily", note: "The 12-hour engine's math text: logic → induction → counting → relations → graphs." },
+  { title: "Competitive Programming 4 (Book 1)", author: "Halim & Halim", inPlan: "Y1 Q1", note: "Ch.1 + 2.1 in Q1; the CP-mindset foundation." },
+  { title: "Competitive Programmer's Handbook", author: "Antti Laaksonen", inPlan: "Y1 Q1 → Y2", note: "Free (cses.fi). The technique chapters matched to the 20→210 CF ladder." },
+  { title: "Composing Programs", author: "Berkeley (SICP in Python)", inPlan: "Y1 Q1 wks 11–13", note: "Ch.1 as the Q3 bridge — the Scheme Interpreter preview, read online free." },
+  { title: "Linear Algebra (Strang, 18.06 companion)", author: "Gilbert Strang", inPlan: "Y2", note: "The NVIDIA/DeepMind math gate text." },
+  { title: "Designing Data-Intensive Applications", author: "Martin Kleppmann", inPlan: "Y3", note: "Infrastructure-flavored system design — the exact genre Snowflake/Databricks interviews test." },
+  { title: "Engineering a Compiler", author: "Cooper & Torczon", inPlan: "Y4 Q3–Q4", note: "Ch.5 SSA + liveness, Ch.13 register allocation — whiteboard-provable by application time." },
+  { title: "Software Engineering at Google", author: "Winters, Manshreck, Wright", inPlan: "Y1 Q2 → Y4", note: "Free at abseil.io. Code Review chapter in Y1 Q2, Testing chapters in Y2 — the daily code-quality standard." },
+  { title: "Principles of Mathematical Analysis (Rudin)", author: "Walter Rudin", inPlan: "Y4 · 6 weeks", note: "Ch.1–4 only — proof fluency for math-heavy whiteboards. Reduced scope, deliberately." },
 ];
 
 export const SUNDAY_REVIEW = [

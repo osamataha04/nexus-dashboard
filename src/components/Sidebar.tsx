@@ -11,6 +11,7 @@ const NAV = [
   { id: "finance", n: "06", label: "Finance", icon: "dollar" },
   { id: "companies", n: "07", label: "Companies", icon: "briefcase" },
   { id: "todo", n: "08", label: "To-Do", icon: "list" },
+  { id: "resources", n: "09", label: "Resource Library", icon: "book" },
 ];
 
 export default function Sidebar() {

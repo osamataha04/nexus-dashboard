@@ -31,6 +31,7 @@ const PATHS: Record<string, ReactNode> = {
   radar: (<><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="4.5" /><path d="M12 12 18.5 5.5" /></>),
   shield: <path d="M12 2.8 19.5 5.6v6c0 5-3.2 8.2-7.5 9.6-4.3-1.4-7.5-4.6-7.5-9.6v-6L12 2.8z" />,
   spark: (<><path d="M12 3v3.5M12 17.5V21M3 12h3.5M17.5 12H21" /><path d="m6 6 2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" /></>),
+  book: (<><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z" /><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-2.5" /></>),
 };
 
 export function Icon({ name, size = 16, className = "", style }: { name: string; size?: number; className?: string; style?: CSSProperties }) {

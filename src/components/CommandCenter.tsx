@@ -48,7 +48,7 @@ export default function CommandCenter() {
       const base = ensurePlan({ ...s, activated: true }, key);
       const parsedTasks: PlanTask[] = chosen.map((p, i) => {
         const bankId = `parsed-${Date.now()}-${i}`;
-        const cat = CATS.find((c) => c.label === p.track)?.id ?? (p.track === "Deep Work" ? "Engineering" : "Admin");
+        const cat = CATS.find((c) => c.label === p.track)?.id ?? "tools";
         return {
           id: `${key}:${bankId}`,
           bankId,
