@@ -1,0 +1,298 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", "IBM Plex Sans", sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-ink: #0b101e;
+  --color-deep: #0d1424;
+  --color-panel: #111a30;
+  --color-panel2: #16203a;
+  --color-edge: #202c4d;
+  --color-edge2: #2b3a63;
+  --color-fog: #8e9cc0;
+  --color-mist: #b9c4e2;
+  --color-snow: #eaf0fc;
+
+  --color-amber: #ffb224;
+  --color-ember: #ff7849;
+  --color-rose: #ff5c7a;
+  --color-teal: #2fd6b5;
+  --color-sky: #5fb0ff;
+  --color-mint: #6fdd8b;
+  --color-lav: #b48cff;
+  --color-cyan: #45c8e8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-snow);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(255, 178, 36, 0.28);
+  color: #fff;
+}
+
+/* ---------- layered ambient background ---------- */
+.nexus-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(900px 600px at 12% -8%, rgba(255, 178, 36, 0.07), transparent 60%),
+    radial-gradient(800px 700px at 96% 18%, rgba(47, 214, 181, 0.06), transparent 60%),
+    radial-gradient(700px 600px at 55% 110%, rgba(95, 176, 255, 0.05), transparent 60%),
+    var(--color-ink);
+}
+.nexus-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(142, 156, 192, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(142, 156, 192, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 0%, black 30%, transparent 100%);
+}
+.nexus-scan {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 220px;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(95, 176, 255, 0.045), transparent);
+  animation: scan 14s linear infinite;
+}
+@keyframes scan {
+  0% { top: -25%; }
+  100% { top: 110%; }
+}
+
+/* ---------- panels ---------- */
+.panel {
+  background: linear-gradient(165deg, var(--color-panel2), var(--color-panel) 55%);
+  border: 1px solid var(--color-edge);
+  border-radius: 10px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 14px 40px -22px rgba(0, 0, 0, 0.8);
+}
+.panel-hover {
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.panel-hover:hover {
+  border-color: var(--edge-hi, var(--color-edge2));
+  transform: translateY(-2px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 22px 50px -24px rgba(0, 0, 0, 0.9);
+}
+
+/* ---------- type helpers ---------- */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.display {
+  font-family: var(--font-display);
+}
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* ---------- bars & meters ---------- */
+.meter {
+  position: relative;
+  height: 6px;
+  border-radius: 99px;
+  background: rgba(142, 156, 192, 0.14);
+  overflow: hidden;
+}
+.meter > i {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.stripes::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -55deg,
+    rgba(255, 255, 255, 0.16) 0 6px,
+    transparent 6px 12px
+  );
+  animation: slide 1.4s linear infinite;
+}
+@keyframes slide {
+  to { background-position: 17px 0; }
+}
+
+/* ---------- live dot ---------- */
+.livedot {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: var(--color-mint);
+}
+.livedot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 99px;
+  border: 1px solid var(--color-mint);
+  animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes ping {
+  0% { transform: scale(0.5); opacity: 0.9; }
+  80%, 100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* ---------- ticker ---------- */
+.ticker-track {
+  display: flex;
+  gap: 3rem;
+  width: max-content;
+  animation: ticker 46s linear infinite;
+}
+.ticker-track:hover { animation-play-state: paused; }
+@keyframes ticker {
+  to { transform: translateX(-50%); }
+}
+
+/* ---------- blinking caret ---------- */
+.caret::after {
+  content: "▍";
+  margin-left: 2px;
+  color: var(--color-amber);
+  animation: blink 1.1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ---------- controls ---------- */
+.btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  border-radius: 7px;
+  border: 1px solid var(--color-edge2);
+  padding: 7px 14px;
+  transition: all 0.18s ease;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--color-mist);
+}
+.btn:hover {
+  border-color: var(--color-fog);
+  color: var(--color-snow);
+  background: rgba(255, 255, 255, 0.05);
+}
+.btn-amber {
+  background: var(--color-amber);
+  border-color: var(--color-amber);
+  color: #171003;
+  font-weight: 700;
+}
+.btn-amber:hover {
+  background: #ffc24d;
+  border-color: #ffc24d;
+  color: #171003;
+  box-shadow: 0 6px 24px -8px rgba(255, 178, 36, 0.55);
+}
+
+input[type="date"], input[type="number"], input[type="text"], select, textarea {
+  font-family: var(--font-mono);
+  background: var(--color-deep);
+  border: 1px solid var(--color-edge);
+  border-radius: 7px;
+  color: var(--color-snow);
+  font-size: 13px;
+  padding: 7px 10px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--color-amber);
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8);
+  cursor: pointer;
+}
+
+/* ---------- custom checkbox ---------- */
+.check {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border-radius: 5px;
+  border: 1.5px solid var(--color-edge2);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  background: transparent;
+}
+.check:hover { border-color: var(--color-fog); }
+.check.on {
+  border-color: var(--chk, var(--color-amber));
+  background: var(--chk, var(--color-amber));
+  animation: pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes pop {
+  0% { transform: scale(0.6); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- scrollbar ---------- */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-ink); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-edge);
+  border-radius: 8px;
+  border: 2px solid var(--color-ink);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-edge2); }
+
+/* ---------- reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* range inputs */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 5px;
+  border-radius: 99px;
+  background: rgba(142, 156, 192, 0.2);
+  outline: none;
+  border: none;
+  padding: 0;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--color-snow);
+  border: 3px solid var(--rng, var(--color-amber));
+  cursor: grab;
+  transition: transform 0.15s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
