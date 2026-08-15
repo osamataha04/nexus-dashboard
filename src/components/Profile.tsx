@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNexus, dayNumber, type Profile } from "../store";
 import { Icon, Modal, useToast } from "./ui";
+import { BUILD_TAG } from "../data";
 
 /* ── first-run gate ───────────────────────────────────────────────── */
 export function Onboarding({
@@ -101,6 +102,7 @@ export function Onboarding({
           <p className="mono text-[9.5px] text-fog/70 text-center mt-3.5">
             nothing leaves this machine · switch operators anytime from the sidebar
           </p>
+          <p className="mono text-[8.5px] text-fog/40 text-center mt-1.5">console build {BUILD_TAG}</p>
         </div>
       </div>
     </div>

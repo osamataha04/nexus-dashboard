@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { COMPANIES, MATH_SUBJECTS, NEGOTIATIONS, PROJECTS, TRACKS, WEEK_SETS, TASK_BANK, type MockSession, type Gig } from "./data";
+import { COMPANIES, MATH_SUBJECTS, NEGOTIATIONS, PROJECTS, TRACKS, WEEK_SETS, TASK_BANK, type MockSession, type Gig, type JobPosting } from "./data";
 
 /* ── types ────────────────────────────────────────────────────────── */
 export type PlanTask = {
@@ -24,7 +24,11 @@ export type NexusState = {
   math: Record<string, { lectures: number; problems: number }>;
   checklists: Record<string, boolean[]>;
   savings: number;
+  bufferTarget: number;
   negotiations: Record<string, { triggers: boolean[]; done: boolean }>;
+  jobs: {
+    postings: JobPosting[];
+  };
   review: Record<string, boolean>;
   activity: Record<string, number>;
   snapshots: { d: string; v: number }[];
@@ -39,6 +43,8 @@ export type NexusState = {
     gigs: Gig[];
     extra: string[];
     links: { github: string; resume: string; portfolio: string };
+    pipeline: Record<string, number>;
+    tasks: { id: string; platform: string; hours: number; rate: number; date: string }[];
   };
 };
 
@@ -62,7 +68,9 @@ const defaults = (): NexusState => ({
   mocks: [],
   designDocs: {},
   incomeActual: [],
-  freelance: { active: {}, gigs: [], extra: [], links: { github: "", resume: "", portfolio: "" } },
+  freelance: { active: {}, gigs: [], extra: [], links: { github: "", resume: "", portfolio: "" }, pipeline: {}, tasks: [] },
+  bufferTarget: 750,
+  jobs: { postings: [] },
 });
 
 /* ── operator profiles (multi-user) ────────────────────────────────── */
@@ -103,7 +111,9 @@ const merge = (raw: unknown): NexusState => {
     mocks: Array.isArray(saved.mocks) ? saved.mocks : [],
     designDocs: saved.designDocs ?? {},
     incomeActual: Array.isArray(saved.incomeActual) ? saved.incomeActual : [],
-    freelance: { ...d.freelance, ...(saved.freelance ?? {}), links: { ...d.freelance.links, ...(saved.freelance?.links ?? {}) }, gigs: saved.freelance?.gigs ?? [], extra: saved.freelance?.extra ?? [], active: saved.freelance?.active ?? {} },
+    freelance: { ...d.freelance, ...(saved.freelance ?? {}), links: { ...d.freelance.links, ...(saved.freelance?.links ?? {}) }, gigs: saved.freelance?.gigs ?? [], extra: saved.freelance?.extra ?? [], active: saved.freelance?.active ?? {}, pipeline: saved.freelance?.pipeline ?? {}, tasks: saved.freelance?.tasks ?? [] },
+    bufferTarget: saved.bufferTarget ?? 750,
+    jobs: { postings: saved.jobs?.postings ?? [] },
   };
 };
 

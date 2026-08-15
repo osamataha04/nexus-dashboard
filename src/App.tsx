@@ -19,6 +19,7 @@ import TodoList from "./components/TodoList";
 import ResourceLibrary from "./components/ResourceLibrary";
 import { Onboarding, ProfileModal } from "./components/Profile";
 import { Icon } from "./components/ui";
+import { BUILD_TAG } from "./data";
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { err: string }> {
   state = { err: "" };
@@ -157,6 +158,7 @@ export default function App() {
                     one goal · get hired by a giant · 4 years · 44 companies · 5 domains · every task traces to a named
                     interview screen. Each operator&rsquo;s state lives in this browser only — nothing leaves this machine.
                   </p>
+                  <p className="mono text-[9px] text-fog/50 mt-2">build {BUILD_TAG}</p>
                 </div>
                 <div className="flex items-center gap-6">
                   <div className="text-right">

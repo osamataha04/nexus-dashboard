@@ -237,9 +237,9 @@ export const TASK_BANK: BankTask[] = [
   { id: "ce-4", cat: "cp-exec", title: "Upsolve session — last round's unsolved problems", detail: "Every problem you didn't solve in the last rated round gets solved today, including one above your rating. Write a 3-line summary per problem: the key observation, the implementation pitfall, the tag. Upsolving is where rating actually moves." },
 
   /* ── Income / RLHF (variable, outside the 12h engine) ── */
-  { id: "in-1", cat: "income", title: "RLHF platforms — one onboarding step or task batch", detail: "Advance the RLHF pipeline one concrete step: finish an onboarding assessment, claim and complete a task batch on Outlier / DataAnnotation / Mercor, or register one more platform (Prolific accepts Egypt). Track hours and rate in the runway sheet — the C/C++ specialist tier ($75–135/hr) unlocks once your C is solid." },
-  { id: "in-2", cat: "income", title: "Mostaql / Upwork — 5 tailored micro-freelance proposals", detail: "Send 5 proposals for Python automation / Excel scripting / data extraction gigs aimed at Egyptian & Arab small businesses. Each proposal: 2 sentences proving you read the brief + one relevant GitHub link. Log all 5 with follow-up dates." },
-  { id: "in-3", cat: "income", title: "Runway sheet — update income vs Asyut burn", detail: "Log this month's actual income against the $230–375/mo Asyut baseline. Recompute months-of-runway and the delta to the $600–900 buffer target (family support ends May 2027 — the buffer must be built from RLHF income by March 2027). Write one line: the single highest-leverage income action for next week." },
+  { id: "in-1", cat: "income", title: "RLHF platforms — one onboarding step or task batch", detail: "Advance the RLHF pipeline one concrete step: finish an onboarding assessment, claim and complete a task batch on Outlier / DataAnnotation / Mercor, or register one more platform. Track hours and rate in the runway sheet — the C/C++ specialist tier ($75–135/hr) unlocks once your C is solid." },
+  { id: "in-2", cat: "income", title: "Upwork / Mostaql — 5 tailored micro-freelance proposals", detail: "Send 5 proposals for Python automation / Excel scripting / data extraction gigs aimed at small businesses in your reachable markets. Each proposal: 2 sentences proving you read the brief + one relevant GitHub link. Log all 5 with follow-up dates." },
+  { id: "in-3", cat: "income", title: "Runway sheet — update income vs your burn", detail: "Log this month's actual income against your personal monthly burn (set it once, keep it honest). Recompute months-of-runway and the delta to your emergency-fund target. Write one line: the single highest-leverage income action for next week." },
   { id: "in-4", cat: "income", title: "GSoC / Outreachy — one contribution or application step", detail: "Move the stipend pipeline forward: claim a beginner-friendly issue on a target org's repo, submit a small PR, or draft one section of the application. GSoC $3–6.6k / Outreachy $7k are one-time but real — the deadline calendar is in the quarter brief." },
 
   /* ── Tools / Projects (1.5h engine block + review) ── */
@@ -265,7 +265,7 @@ export const QUARTERS: Quarter[] = [
   { id: 1, label: "Y1 · Q1", range: "Jul – Sep 2026", theme: "Python + Discrete Math + Tools", deliverables: ["6.100L + Helsinki complete; CF 600+", "Discrete Math (6.042J) foundations + MCS", "Missing Semester: git/bash/vim live", "GitHub active from day one"], milestone: "Working Python programs · git workflow operational" },
   { id: 2, label: "Y1 · Q2", range: "Oct – Dec 2026", theme: "Python depth + Calc I + Probability", deliverables: ["Recursion, OOP, generators deep", "Calculus I differentiation (18.01)", "Probability I: EV, distributions, Bayes", "CP: binary search, prefix sums · CF 900 · Hacktoberfest PR"], milestone: "Income accounts live (RLHF + Mostaql)" },
   { id: 3, label: "Y1 · Q3", range: "Jan – Mar 2027", theme: "C language + Scheme Interpreter", deliverables: ["K&R C Ch.1–6", "Scheme Interpreter in C: closures + TCO + mark-sweep GC", "Zetamac + Godbolt habits start", "CF 1100 · RLHF earning · Outreachy/GSoC apps"], milestone: "First real system built in C · RLHF income flowing" },
-  { id: 4, label: "Y1 · Q4", range: "Apr – Jun 2027", theme: "C data structures + Nand2Tetris", deliverables: ["Linked list / BST / hash table from scratch in C", "Nand2Tetris Part 1: gates → ALU → CPU", "Theory of Computation: automata → CFGs", "CF 1400 · portfolio site + blog #1 live"], milestone: "⚠ Family support ends May 2027 — buffer $600–900 must hold" },
+  { id: 4, label: "Y1 · Q4", range: "Apr – Jun 2027", theme: "C data structures + Nand2Tetris", deliverables: ["Linked list / BST / hash table from scratch in C", "Nand2Tetris Part 1: gates → ALU → CPU", "Theory of Computation: automata → CFGs", "CF 1400 · portfolio site + blog #1 live"], milestone: "Portfolio site + blog #1 live — visibility engine starts" },
   { id: 5, label: "Y2 · Q1", range: "Jul – Sep 2027", theme: "K&R complete + Heap Allocator + Calc II", deliverables: ["K&R all exercises done", "Heap allocator: arena + slab, valgrind-clean, benchmarked", "Handmade Hero ep. 1–50", "CF 1550 · first remote role search begins"], milestone: "First real design doc (5-section) · public allocator" },
   { id: 6, label: "Y2 · Q2", range: "Oct – Dec 2027", theme: "C++ begins + Linear Algebra", deliverables: ["C++ RAII allocator rewrite: unique_ptr, placement new, moves", "C syscalls/signals: fork, exec, mmap", "Linear Algebra (Strang 18.06) first half", "CP: segment trees + Fenwick · CF 1650"], milestone: "C++ starts 18 months early — the quant-firm gate opens" },
   { id: 7, label: "Y2 · Q3", range: "Jan – Mar 2028", theme: "xv6 kernel + eBPF + LLDB", deliverables: ["xv6: scheduler, VM, FS + custom modification", "eBPF syscall tracer", "LLDB as primary debugger · ASan/UBSan always-on", "CP: KMP + Z-function · CF 1700"], milestone: "xv6 modification public with architecture doc" },
@@ -640,7 +640,7 @@ export const INCOME_MONTHS: { m: string; v: number }[] = (() => {
     out.push({ m: `${names[mi]} ${2026 + Math.floor((6 + i) / 12)}`, v: 0 });
   }
   /* Anchors from Section 12 + the income catalog:
-     Oct'26 RLHF onboarding $50–150 → Feb'27 $250–450 → May'27 family support ends →
+     Oct'26 RLHF onboarding $50–150 → Feb'27 $250–450 →
      Sep'27 first remote junior $800–1,200 → Jan'28 C/C++ tier $1,500–2,500 →
      Jun'28 graduation $2,000–3,500 → Sep'29 $100k-yr equivalent → Jun'30 $6,000+ / giant offer */
   const vals = [
@@ -653,15 +653,6 @@ export const INCOME_MONTHS: { m: string; v: number }[] = (() => {
   ];
   return vals.map((v, i) => ({ m: out[i].m, v }));
 })();
-
-/* Asyut survival baseline — real monthly costs */
-export const EXPENSES = [
-  { item: "Rent (Asyut, shared)", low: 80, high: 120 },
-  { item: "Food & groceries", low: 90, high: 150 },
-  { item: "Internet + phone", low: 15, high: 25 },
-  { item: "Transport", low: 10, high: 20 },
-  { item: "Contingency", low: 35, high: 60 },
-];
 
 export const NEGOTIATIONS = [
   {
@@ -708,8 +699,67 @@ export const PARSED_PREVIEW = [
   { track: "CP Execution", task: "5 CF problems rated 800 — Codeforces account live", priority: "High" },
   { track: "Rosen Discrete Math", task: "Rosen 1.1–1.6 — logic equivalences + rules of inference", priority: "Medium" },
   { track: "Tools / Projects", task: "NEXUS-Y1 repo created + README committed in English", priority: "Medium" },
-  { track: "Income (RLHF)", task: "Register: Outlier + DataAnnotation + Prolific (accepts Egypt)", priority: "Medium" },
+  { track: "Income (RLHF)", task: "Register: Outlier + DataAnnotation + Prolific", priority: "Medium" },
   { track: "Tools / Projects", task: "Obsidian vault + Anki decks: 6.100L · Rosen · CP Patterns", priority: "Low" },
+];
+
+/* ── build identity — proves which version is actually live ────────── */
+export const BUILD_TAG = "v2.4 · opportunity radar + universal build";
+
+/* ── 10 · opportunity radar ───────────────────────────────────────── */
+export type JobPosting = {
+  id: string;
+  title: string;
+  company: string;
+  url: string;
+  platform: string;
+  kind: "Full-time" | "Part-time" | "Freelance" | "Internship" | "Contract";
+  status: "radar" | "applied" | "interview" | "offer" | "rejected";
+  score: number;
+  added: string;
+};
+
+export const SEARCH_PRESETS = [
+  { id: "python", label: "Python", q: "python developer" },
+  { id: "cpp", label: "C++ / Low Latency", q: "c++ low latency" },
+  { id: "cuda", label: "CUDA / GPU", q: "cuda engineer" },
+  { id: "go", label: "Go / Backend", q: "golang backend" },
+  { id: "kernel", label: "Kernel / Systems", q: "linux kernel engineer" },
+  { id: "compilers", label: "Compilers", q: "compiler engineer llvm" },
+  { id: "db", label: "Databases", q: "database engine engineer" },
+  { id: "quant", label: "Quant Dev", q: "quant developer" },
+];
+
+export const JOB_PLATFORMS = [
+  { id: "linkedin", name: "LinkedIn Jobs", url: (q: string) => `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(q)}&f_TPR=r604800`, color: "#5fb0ff", note: "The volume giant — filter to past week; message recruiters directly before applying (Section 9 rule)." },
+  { id: "indeed", name: "Indeed", url: (q: string) => `https://www.indeed.com/jobs?q=${encodeURIComponent(q)}&fromage=7`, color: "#45c8e8", note: "Largest aggregator; set alerts per preset so matches arrive daily." },
+  { id: "glassdoor", name: "Glassdoor", url: (q: string) => `https://www.glassdoor.com/Job/jobs.htm?sc.keyword=${encodeURIComponent(q)}`, color: "#6fdd8b", note: "Interview reports attached to listings — read them before you apply." },
+  { id: "wellfound", name: "Wellfound (AngelList)", url: (q: string) => `https://wellfound.com/jobs?query=${encodeURIComponent(q)}`, color: "#b48cff", note: "Startups with transparent comp; strong for early remote systems roles." },
+  { id: "otta", name: "Otta", url: (q: string) => `https://otta.com/jobs?query=${encodeURIComponent(q)}`, color: "#ffb224", note: "Curated tech-only boards; signal-heavy companies." },
+  { id: "yc", name: "YC Work at a Startup", url: (q: string) => `https://www.workatastartup.com/jobs?query=${encodeURIComponent(q)}`, color: "#ff7849", note: "One profile, apply across YC companies — referral-like warmth." },
+  { id: "hn", name: "HN Who's Hiring", url: () => "https://www.google.com/search?q=site%3Anews.ycombinator.com+%22who+is+hiring%22", color: "#ff5c7a", note: "Monthly mega-thread; systems roles from engineers, not recruiters." },
+  { id: "remoteok", name: "RemoteOK", url: (q: string) => `https://remoteok.com/remote-${encodeURIComponent(q.split(" ")[0])}-jobs`, color: "#2fd6b5", note: "Remote-first listings, worldwide-friendly filters." },
+  { id: "weworkremotely", name: "We Work Remotely", url: (q: string) => `https://weworkremotely.com/remote-jobs/search?term=${encodeURIComponent(q)}`, color: "#9db4ff", note: "The oldest remote board; programming category is strong." },
+  { id: "remotive", name: "Remotive", url: (q: string) => `https://remotive.com/remote-jobs?search=${encodeURIComponent(q)}`, color: "#45c8e8", note: "Hand-screened remote roles with timezone notes." },
+  { id: "builtin", name: "Built In", url: (q: string) => `https://builtin.com/jobs?search=${encodeURIComponent(q)}`, color: "#6fdd8b", note: "US tech-hub companies, many remote-eligible." },
+  { id: "levels", name: "Levels.fyi", url: () => "https://www.levels.fyi/t/software-engineer?countryId=254", color: "#ffb224", note: "Not a job board — the offer-number truth source. Consult before any negotiation." },
+];
+
+export type FreelancePlatform = { id: string; name: string; url: (q: string) => string; color: string; kind: string; stages: string[] };
+
+export const FREELANCE_PLATFORMS: FreelancePlatform[] = [
+  { id: "upwork", name: "Upwork", url: (q) => `https://www.upwork.com/nx/search/jobs/?q=${encodeURIComponent(q)}`, color: "#6fdd8b", kind: "marketplace", stages: ["not registered", "profile live", "10 proposals sent", "first gig won", "steady clients"] },
+  { id: "mostaql", name: "Mostaql", url: () => "https://mostaql.com/projects", color: "#2fd6b5", kind: "marketplace", stages: ["not registered", "profile live", "10 proposals sent", "first gig won", "steady clients"] },
+  { id: "freelancer", name: "Freelancer", url: (q) => `https://www.freelancer.com/jobs/${encodeURIComponent(q.split(" ")[0])}/`, color: "#45c8e8", kind: "marketplace", stages: ["not registered", "profile live", "10 proposals sent", "first gig won", "steady clients"] },
+  { id: "contra", name: "Contra", url: () => "https://contra.com/opportunities", color: "#b48cff", kind: "marketplace", stages: ["not registered", "profile live", "10 proposals sent", "first gig won", "steady clients"] },
+  { id: "fiverr", name: "Fiverr", url: () => "https://www.fiverr.com/", color: "#9db4ff", kind: "gig-store", stages: ["no gigs listed", "1st gig published", "optimized + samples", "first order", "repeat buyers"] },
+  { id: "outlier", name: "Outlier (Scale)", url: () => "https://outlier.ai/", color: "#ff7849", kind: "rlhf", stages: ["not registered", "assessment passed", "first tasks done", "weekly volume", "top-tier rates"] },
+  { id: "dataannotation", name: "DataAnnotation", url: () => "https://www.dataannotation.tech/", color: "#ffb224", kind: "rlhf", stages: ["not registered", "assessment passed", "first tasks done", "weekly volume", "top-tier rates"] },
+  { id: "mercor", name: "Mercor", url: () => "https://mercor.com/", color: "#ff5c7a", kind: "rlhf", stages: ["not registered", "assessment passed", "first tasks done", "weekly volume", "top-tier rates"] },
+  { id: "prolific", name: "Prolific", url: () => "https://www.prolific.com/", color: "#5fb0ff", kind: "rlhf", stages: ["not registered", "assessment passed", "first tasks done", "weekly volume", "top-tier rates"] },
+  { id: "algora", name: "Algora Bounties", url: () => "https://algora.io/bounties", color: "#6fdd8b", kind: "oss", stages: ["lurking", "1st PR merged", "niche repos targeted", "1st bounty won", "bounty regular"] },
+  { id: "gsoc", name: "GSoC / Outreachy", url: () => "https://summerofcode.withgoogle.com/programs", color: "#2fd6b5", kind: "oss", stages: ["orgs researched", "issue claimed", "PR merged", "proposal drafted", "submitted"] },
+  { id: "kaggle", name: "Kaggle", url: () => "https://www.kaggle.com/competitions", color: "#45c8e8", kind: "competition", stages: ["account made", "tutorial comp done", "1st submission", "top-50% finish", "medal tier"] },
 ];
 
 /* ── 09 · resource library (csdiy.wiki taxonomy, plan-anchored) ─────── */

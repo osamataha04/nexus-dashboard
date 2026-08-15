@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PARSED_PREVIEW, EXPENSES, COMPANIES, QUARTERS, CATS } from "../data";
+import { PARSED_PREVIEW, COMPANIES, QUARTERS, CATS } from "../data";
 import { useNexus, quarterIndex, phaseFor, dayNumber, habitStreak, todayKey, DAY_MS, ensurePlan, type PlanTask } from "../store";
 import { Icon, Modal, Check, Reveal, useToast, Chip } from "./ui";
 
@@ -24,9 +24,6 @@ export default function CommandCenter() {
     ? ["archaeology", "godbolt", "zetamac"].map((id) => habitStreak(state.habitLog, id))
     : [0, 0, 0];
   const bestStreak = Math.max(...streaks, 0);
-
-  const expLow = EXPENSES.reduce((a, e) => a + e.low, 0);
-  const expHigh = EXPENSES.reduce((a, e) => a + e.high, 0);
 
   const pulse = Array.from({ length: 14 }, (_, i) => {
     const d = new Date(Date.now() - (13 - i) * DAY_MS);
@@ -200,7 +197,7 @@ export default function CommandCenter() {
             <div className="grid grid-cols-3 gap-2 mt-5">
               {[
                 { k: "BEST STREAK", v: `${bestStreak}d`, c: "#ff7849" },
-                { k: "EXPENSES", v: `$${expLow}–${expHigh}`, c: "#6fdd8b" },
+                { k: "SAVED", v: `$${state.savings}`, c: "#6fdd8b" },
                 { k: "COMPANIES", v: "44", c: "#45c8e8" },
               ].map((s) => (
                 <div key={s.k} className="rounded-md border border-edge bg-deep/60 px-3 py-2.5 text-center">

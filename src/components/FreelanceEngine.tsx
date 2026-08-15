@@ -274,8 +274,8 @@ export default function FreelanceEngine() {
             ))}
             {cliffIdx >= 0 && cliffIdx <= 47 && (
               <g>
-                <line x1={xs(cliffIdx)} x2={xs(cliffIdx)} y1={20} y2={H - 26} stroke="#ff5c7a" strokeDasharray="4 4" />
-                <text x={xs(cliffIdx) + 4} y={28} fontSize="8" fill="#ff5c7a" fontFamily="JetBrains Mono, monospace">family support ends</text>
+                <line x1={xs(cliffIdx)} x2={xs(cliffIdx)} y1={20} y2={H - 26} stroke="#5fb0ff" strokeDasharray="4 4" />
+                <text x={xs(cliffIdx) + 4} y={28} fontSize="8" fill="#5fb0ff" fontFamily="JetBrains Mono, monospace">remote role target</text>
               </g>
             )}
             <polyline points={projLine} fill="none" stroke="rgba(111,221,139,0.55)" strokeWidth="2" strokeDasharray="6 4" />
@@ -292,7 +292,7 @@ export default function FreelanceEngine() {
           <div className="flex items-center gap-4 mt-2">
             <span className="flex items-center gap-2 mono text-[9px] text-fog"><span className="w-4 h-[2px] bg-mint/60" style={{ borderTop: "2px dashed #6fdd8b", height: 0 }} /> projected curve</span>
             <span className="flex items-center gap-2 mono text-[9px] text-fog"><span className="w-2 h-2 rounded-full bg-mint inline-block" /> actual (logged)</span>
-            <span className="mono text-[9px] text-mist ml-auto">buffer target: $600–900 before May 2027</span>
+            <span className="mono text-[9px] text-mist ml-auto">emergency-fund target: set it in the Finance spine</span>
           </div>
         </div>
       </Reveal>

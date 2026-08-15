@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { COMPANIES, TIER_COLORS, type Company } from "../data";
 import { HiringRadar } from "./PlanPanels";
+import OpportunityRadar from "./OpportunityRadar";
 import { useNexus } from "../store";
 import { SectionHead, Reveal, Icon, Check, Modal, Chip, Meter } from "./ui";
 
@@ -50,6 +51,7 @@ export default function Companies() {
       />
 
       <HiringRadar />
+      <OpportunityRadar />
 
       {/* pre-application checklist header */}
       <Reveal className="mb-6">

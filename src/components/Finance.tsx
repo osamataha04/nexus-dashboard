@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { INCOME_MONTHS, EXPENSES, NEGOTIATIONS } from "../data";
+import { INCOME_MONTHS, NEGOTIATIONS } from "../data";
 import { useNexus, dayNumber, fmtMoney } from "../store";
 import { SectionHead, Reveal, Meter, Icon, Check, useToast } from "./ui";
 import FreelanceEngine from "./FreelanceEngine";
@@ -15,7 +15,7 @@ const PATH = LINE.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)},${p.y.t
 const AREA = `${PATH} L${LINE[LINE.length - 1].x},${H - PAD} L${LINE[0].x},${H - PAD} Z`;
 
 const MILESTONES = [
-  { i: 10, label: "CLIFF · May 2027", color: "#ff5c7a", above: true },
+  { i: 3, label: "RLHF LIVE · Oct 2026", color: "#6fdd8b", above: true },
   { i: 14, label: "REMOTE JOB · Sep 2027", color: "#5fb0ff", above: false },
   { i: 47, label: "GIANT OFFER · Jun 2030", color: "#ffb224", above: true },
 ];
@@ -37,9 +37,7 @@ export default function Finance() {
     setHover(Math.max(0, Math.min(47, i)));
   };
 
-  const expLow = EXPENSES.reduce((a, e) => a + e.low, 0);
-  const expHigh = EXPENSES.reduce((a, e) => a + e.high, 0);
-  const bufferPct = Math.min(100, (state.savings / 750) * 100);
+  const bufferPct = Math.min(100, (state.savings / Math.max(1, state.bufferTarget)) * 100);
 
   return (
     <section id="finance" className="py-16 scroll-mt-24">
@@ -49,7 +47,7 @@ export default function Finance() {
         kicker="Financial Spine"
         color="#6fdd8b"
         title="Income Timeline"
-        desc="Month-by-month. The cliff: May 2027. Buffer target: $600–900. Remote job: Sep 2027. Giant offer: Jun–Dec 2030."
+        desc="Month-by-month trajectory: RLHF onboarding → first remote role → C/C++ specialist rates → the giant-offer window. Log real income against it and watch the dots land."
         right={
           <Reveal>
             <div className="panel px-5 py-3">
@@ -130,16 +128,25 @@ export default function Finance() {
         </div>
       </Reveal>
 
-      <div className="grid lg:grid-cols-3 gap-4 mt-4">
-        {/* buffer */}
+      <div className="grid lg:grid-cols-2 gap-4 mt-4">
+        {/* emergency fund */}
         <Reveal>
           <div className="panel p-5 h-full" style={{ borderColor: "rgba(111,221,139,0.3)" }}>
             <div className="flex items-center justify-between">
-              <span className="kicker text-mint">Buffer Tracker</span>
-              <span className="mono text-[10px] text-fog">target $600–900 by Mar 2027</span>
+              <span className="kicker text-mint">Emergency Fund</span>
+              <span className="mono text-[10px] text-fog">
+                target <input
+                  type="number"
+                  min={1}
+                  className="!w-20 !py-0.5 !px-1.5 !text-[10px] inline text-right"
+                  value={state.bufferTarget || ""}
+                  onChange={(e) => set((s) => ({ ...s, bufferTarget: Math.max(1, Number(e.target.value) || 750) }))}
+                  aria-label="emergency fund target"
+                /> $
+              </span>
             </div>
             <div className="display font-bold text-4xl text-snow mt-4 tabular-nums">{fmtMoney(state.savings)}</div>
-            <div className="kicker text-[9px] text-fog mt-1">saved · $750 midpoint target</div>
+            <div className="kicker text-[9px] text-fog mt-1">saved · {Math.round(bufferPct)}% of your target</div>
             <div className="mt-3"><Meter pct={bufferPct} color="#6fdd8b" h={8} striped={bufferPct < 100} /></div>
             <div className="flex items-center gap-2 mt-4">
               <input
@@ -153,38 +160,14 @@ export default function Finance() {
               />
               <button
                 className="btn btn-amber"
-                onClick={() => show(state.savings >= 750 ? "Buffer funded. Breathe." : "Savings logged.", "#6fdd8b")}
+                onClick={() => show(state.savings >= state.bufferTarget ? "Fund complete. Breathe." : "Savings logged.", "#6fdd8b")}
               >
                 LOG
               </button>
             </div>
             <p className="text-[11px] text-fog mt-3.5 leading-relaxed">
-              Survival minimum: <span className="text-mist font-semibold">${expLow}–{expHigh}/mo</span> in Asyut. Everything above $500/mo income goes here until the remote job is stable.
+              Set your own monthly burn in your head, pick a target that buys <span className="text-mist font-semibold">3–6 months of it</span>, and route everything above survival income here until your remote role is stable.
             </p>
-          </div>
-        </Reveal>
-
-        {/* expenses */}
-        <Reveal delay={90}>
-          <div className="panel p-5 h-full">
-            <div className="flex items-center justify-between">
-              <span className="kicker text-sky">Expense Baseline</span>
-              <span className="mono text-[10px] text-fog">Asyut, Egypt</span>
-            </div>
-            <div className="mt-4 space-y-2.5">
-              {EXPENSES.map((e) => (
-                <div key={e.item} className="flex items-center justify-between gap-3 text-[12.5px]">
-                  <span className="text-mist">{e.item}</span>
-                  <span className="flex-1 h-px bg-edge/70" />
-                  <span className="mono text-[11px] text-fog tabular-nums">${e.low}–{e.high}</span>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 pt-3 border-t border-edge flex items-center justify-between">
-              <span className="display font-semibold text-snow text-[14px]">Monthly burn</span>
-              <span className="mono text-[13px] font-bold text-sky tabular-nums">${expLow}–${expHigh}</span>
-            </div>
-            <p className="text-[11px] text-fog mt-3 leading-relaxed">Comfortable: $400–500/mo. The gap between burn and income is the whole game until Sep 2027.</p>
           </div>
         </Reveal>
 
