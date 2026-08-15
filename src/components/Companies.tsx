@@ -51,6 +51,7 @@ export default function Companies() {
       />
 
       <HiringRadar />
+      <div id="radar" className="scroll-mt-24" />
       <OpportunityRadar />
 
       {/* pre-application checklist header */}

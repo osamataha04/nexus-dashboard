@@ -116,6 +116,7 @@ export function ProfileModal({ open, onClose }: { open: boolean; onClose: () => 
   const [name, setName] = useState(profile.name);
   const [date, setDate] = useState(profile.startDate);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [confirmFactory, setConfirmFactory] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const [newName, setNewName] = useState("");
   const [newDate, setNewDate] = useState("2026-07-01");
@@ -211,6 +212,42 @@ export function ProfileModal({ open, onClose }: { open: boolean; onClose: () => 
           </div>
         </div>
       )}
+
+      {/* danger zone */}
+      <div className="rounded-lg border border-rose/30 bg-rose/[0.04] p-4 mt-5">
+        <div className="flex items-center gap-2 mb-2.5">
+          <Icon name="trash" size={12} className="text-rose" />
+          <span className="kicker text-[9px] text-rose">danger zone</span>
+        </div>
+        {confirmFactory ? (
+          <div className="flex flex-wrap items-center gap-2.5">
+            <span className="mono text-[11px] text-rose flex-1 min-w-[220px]">
+              Erase EVERY operator, EVERY saved state, and return to first-run registration? This cannot be undone.
+            </span>
+            <button
+              className="btn !py-1.5 !px-3 !text-[9px] !border-rose !text-rose !bg-rose/10"
+              onClick={() => {
+                try {
+                  Object.keys(localStorage)
+                    .filter((k) => k.startsWith("nexus-"))
+                    .forEach((k) => localStorage.removeItem(k));
+                } catch { /* private mode */ }
+                window.location.reload();
+              }}
+            >
+              YES — ERASE EVERYTHING
+            </button>
+            <button className="btn !py-1.5 !px-3 !text-[9px]" onClick={() => setConfirmFactory(false)}>KEEP</button>
+          </div>
+        ) : (
+          <button className="btn !py-1.5 !px-3 !text-[9px] !border-rose/50 !text-rose flex items-center gap-1.5" onClick={() => setConfirmFactory(true)}>
+            <Icon name="refresh" size={11} /> FACTORY RESET — erase all operators & data
+          </button>
+        )}
+        <p className="mono text-[8.5px] text-fog/70 mt-2">
+          use this when old test data won&rsquo;t die — it wipes every storage key this console ever wrote.
+        </p>
+      </div>
 
       {/* new operator */}
       <div className="rounded-lg border border-edge bg-deep/40 p-4 mt-5">

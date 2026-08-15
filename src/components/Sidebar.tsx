@@ -12,6 +12,7 @@ const NAV = [
   { id: "companies", n: "07", label: "Companies", icon: "briefcase" },
   { id: "todo", n: "08", label: "To-Do", icon: "list" },
   { id: "resources", n: "09", label: "Resource Library", icon: "book" },
+  { id: "radar", n: "10", label: "Opportunities", icon: "radar" },
 ];
 
 export default function Sidebar({ onOperator }: { onOperator: () => void }) {

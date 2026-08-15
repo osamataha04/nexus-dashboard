@@ -77,7 +77,9 @@ const defaults = (): NexusState => ({
 export type Profile = { id: string; name: string; startDate: string };
 const PKEY = "nexus-profiles-v1";
 const AKEY = "nexus-active-v1";
-const stateKey = (id: string) => `nexus-state-v2::${id}`;
+/* v3 generation: deliberately orphans every earlier saved state so polluted
+   test data (the infamous 56%) can never resurface — all operators start clean */
+const stateKey = (id: string) => `nexus-state-v3::${id}`;
 
 export function loadProfiles(): Profile[] {
   try { return JSON.parse(localStorage.getItem(PKEY) ?? "[]") as Profile[]; } catch { return []; }

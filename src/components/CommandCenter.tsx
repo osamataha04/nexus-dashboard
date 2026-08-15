@@ -220,8 +220,14 @@ export default function CommandCenter() {
               </button>
             </div>
 
-            <div className="mt-auto pt-5 flex items-center justify-between">
-              <span className="mono text-[10px] text-fog/60">state persists locally</span>
+            <div className="mt-auto pt-5 flex items-center justify-between gap-2">
+              <a
+                href="#radar"
+                className="btn !border-cyan/50 !text-cyan flex items-center gap-1.5"
+                title="Jump to the Opportunity Radar — job boards + freelance pipelines"
+              >
+                <Icon name="radar" size={12} /> OPPORTUNITIES
+              </a>
               <button
                 className={`btn ${wipeArmed ? "!border-rose !text-rose" : ""}`}
                 onClick={() => {

@@ -107,7 +107,7 @@ export default function App() {
   };
   const deleteProfile = (id: string) => {
     try {
-      localStorage.removeItem(`nexus-state-v2::${id}`);
+      localStorage.removeItem(`nexus-state-v3::${id}`);
     } catch {
       /* noop */
     }
