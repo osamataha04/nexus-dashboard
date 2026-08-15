@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
-import { CATS, WEEK_SETS } from "../data";
+import { CATS, WEEK_SETS, SUNDAY_REVIEW } from "../data";
 import { useNexus, ensurePlan, todayKey, bumpActivity, type PlanTask } from "../store";
 import { Icon, SectionHead, Reveal, Check, Meter, useToast } from "./ui";
+import { WeekView } from "./PlanPanels";
 
 const catOf = (id: string) => CATS.find((c) => c.id === id) ?? CATS[CATS.length - 1];
 const dayLabel = (key: string) =>
@@ -14,7 +15,7 @@ export default function TodoList() {
   const { state, set } = useNexus();
   const { show, node } = useToast();
   const [composerOpen, setComposerOpen] = useState(false);
-  const [nt, setNt] = useState({ title: "", detail: "", cat: "Engineering" });
+  const [nt, setNt] = useState({ title: "", detail: "", cat: CATS[0]?.id ?? "python" });
 
   const today = todayKey();
   const dow = new Date(today + "T12:00:00").getDay();
@@ -109,6 +110,8 @@ export default function TodoList() {
         }
       />
 
+      <WeekView />
+
       <div className="grid lg:grid-cols-[1fr_300px] gap-5 items-start">
         {/* ── today's plan ─────────────────────────────────────────── */}
         <div>
@@ -160,6 +163,21 @@ export default function TodoList() {
                         )}
                         {t.adhoc && !t.done && (
                           <span className="mono text-[9px] px-2 py-0.5 rounded-full border border-sky/40 bg-sky/10 text-sky">ad-hoc</span>
+                        )}
+                        {t.adhoc && (
+                          <button
+                            className="ml-auto btn !p-1.5 hover:!border-rose/60 hover:!text-rose"
+                            title="Delete this ad-hoc task"
+                            onClick={() => {
+                              set((s) => bumpActivity(
+                                { ...s, plans: { ...s.plans, [today]: (s.plans[today] ?? []).filter((x) => x.id !== t.id) } },
+                                t.done ? -1 : 0
+                              ));
+                              show("Ad-hoc task deleted.", "#ff5c7a");
+                            }}
+                          >
+                            <Icon name="trash" size={11} />
+                          </button>
                         )}
                       </div>
                       <p className="text-[12.5px] text-fog leading-relaxed mt-1.5">{t.detail}</p>
@@ -284,6 +302,61 @@ export default function TodoList() {
           )}
         </div>
       </div>
+
+      {/* ── sunday review + obsidian export ────────────────────────── */}
+      <Reveal className="mt-6">
+        <div className="panel p-5 flex flex-col md:flex-row md:items-center gap-4" style={{ borderColor: "rgba(111,221,139,0.25)" }}>
+          <div className="flex items-center gap-3 flex-none">
+            <Icon name="book" size={16} className="text-mint" />
+            <div>
+              <span className="kicker text-mint block">Sunday Review</span>
+              <span className="mono text-[10px] text-fog">30 minutes · close the week honestly</span>
+            </div>
+          </div>
+          <div className="flex-1 flex flex-wrap gap-1.5">
+            {SUNDAY_REVIEW.map((r) => {
+              const on = !!state.review[r];
+              return (
+                <button key={r} onClick={() => set((s) => ({ ...s, review: { ...s.review, [r]: !s.review[r] } }))}
+                  className={`mono text-[9.5px] px-2.5 py-1.5 rounded-full border transition-all cursor-pointer ${on ? "border-mint/60 text-mint bg-mint/10 line-through" : "border-edge text-fog hover:text-mist hover:border-edge2"}`}
+                  title={r}>
+                  {r.length > 34 ? r.slice(0, 34) + "…" : r}
+                </button>
+              );
+            })}
+          </div>
+          <button
+            className="btn flex items-center justify-center gap-2 flex-none"
+            style={{ borderColor: "rgba(111,221,139,0.5)", color: "#6fdd8b" }}
+            onClick={() => {
+              const per = (cat: string) => {
+                const ts = plan.filter((t) => t.cat === cat);
+                return ts.length ? Math.round((ts.filter((t) => t.done).length / ts.length) * 100) : null;
+              };
+              const lines: string[] = [`# NEXUS — Sunday Review · ${new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`, ""];
+              lines.push("## Queue completion (today's plan)");
+              CATS.forEach((c) => { const p = per(c.id); if (p !== null) lines.push(`- ${c.label}: ${p}%`); });
+              lines.push("", "## CP", `- Rating: ${state.cp.rating} · contests logged: ${state.cp.contests.length}`);
+              lines.push("", "## Money", `- Savings: $${state.savings} · income entries logged: ${state.incomeActual.length} · gigs won: ${state.freelance.gigs.filter((x) => x.status === "won").length}`);
+              const carried = plan.filter((t) => t.carriedFrom && !t.done).map((t) => t.title);
+              lines.push("", "## Carried forward", carried.length ? carried.map((t) => `- ${t}`).join("\n") : "- none — clean slate");
+              lines.push("", "## Review checklist");
+              SUNDAY_REVIEW.forEach((r) => lines.push(`- [${state.review[r] ? "x" : " "}] ${r}`));
+              lines.push("", "## One sentence for the week", "> ");
+              const blob = new Blob([lines.join("\n")], { type: "text/markdown" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = `nexus-review-${todayKey()}.md`;
+              a.click();
+              URL.revokeObjectURL(url);
+              show("Sunday review exported — drop it in NEXUS/Journal.", "#6fdd8b");
+            }}
+          >
+            <Icon name="upload" size={12} /> EXPORT TO OBSIDIAN
+          </button>
+        </div>
+      </Reveal>
     </section>
   );
 }

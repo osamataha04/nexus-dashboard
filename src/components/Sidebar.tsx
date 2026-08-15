@@ -14,8 +14,8 @@ const NAV = [
   { id: "resources", n: "09", label: "Resource Library", icon: "book" },
 ];
 
-export default function Sidebar() {
-  const { state, restore } = useNexus();
+export default function Sidebar({ onOperator }: { onOperator: () => void }) {
+  const { state, restore, profile } = useNexus();
   const { show, node } = useToast();
   const [active, setActive] = useState("command");
   const [now, setNow] = useState(new Date());
@@ -110,6 +110,20 @@ export default function Sidebar() {
         </nav>
 
         <div className="px-5 py-4 border-t border-edge">
+          <button
+            className="w-full flex items-center gap-2.5 rounded-md border border-edge bg-deep/60 px-3 py-2 mb-3 group hover:border-amber/50 transition-colors text-left cursor-pointer"
+            onClick={onOperator}
+            title="Operator console — switch profile, edit name / start date, reset progress"
+          >
+            <span className="grid place-items-center w-7 h-7 flex-none rounded-full border border-edge2 text-mist group-hover:text-amber group-hover:border-amber/50 transition-colors">
+              <Icon name="user" size={13} />
+            </span>
+            <span className="flex-1 min-w-0">
+              <span className="display font-semibold text-[12.5px] text-snow block truncate leading-tight">{profile.name}</span>
+              <span className="kicker text-[8px] text-fog">operator · switch / edit</span>
+            </span>
+            <Icon name="edit" size={12} className="text-fog group-hover:text-amber transition-colors flex-none" />
+          </button>
           <div className="flex items-center justify-between mb-3">
             <span className="flex items-center gap-2">
               <span className="livedot" />
@@ -146,8 +160,12 @@ export default function Sidebar() {
             </span>
             <span className="display font-bold text-snow">NEXUS</span>
             <span className="mono text-[10px] text-fog">D{day > 0 ? day : "—"}</span>
+            <span className="mono text-[10px] text-mist truncate max-w-[88px] hidden xs:inline sm:inline">{profile.name}</span>
           </a>
           <span className="flex items-center gap-2">
+            <button className="btn !p-1.5" onClick={onOperator} aria-label="operator console" title="operator console">
+              <Icon name="user" size={13} />
+            </button>
             <button className="btn !p-1.5" onClick={backup} aria-label="download backup">
               <Icon name="upload" size={13} />
             </button>

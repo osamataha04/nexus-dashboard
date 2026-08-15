@@ -1,6 +1,7 @@
 import { useState } from "react";
 import confetti from "canvas-confetti";
-import { PROJECTS, QUARTERS } from "../data";
+import { PROJECTS, QUARTERS, resForQuarter } from "../data";
+import DesignDocs from "./DesignDocs";
 import { useNexus, quarterIndex, DAY_MS } from "../store";
 import { SectionHead, Reveal, Meter, Icon, Chip, Modal } from "./ui";
 
@@ -154,6 +155,23 @@ export default function BuildTrack() {
                           </div>
                           <p className="text-[12.5px] text-snow mt-1.5 leading-snug">{q.milestone}</p>
                         </div>
+                        {resForQuarter(q.id).length > 0 && (
+                          <div className="md:col-span-2 flex flex-wrap items-center gap-1.5 pt-3.5 mt-4 border-t border-edge/50">
+                            <span className="kicker text-[8px] text-sky/80 mr-1">csdiy complements</span>
+                            {resForQuarter(q.id).map((r) => (
+                              <a
+                                key={r.code}
+                                href={r.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                title={`${r.code} · ${r.topic}`}
+                                className="mono text-[9.5px] px-2 py-0.5 rounded-full border border-sky/35 text-sky/90 bg-sky/[0.06] hover:bg-sky/15 hover:border-sky/60 transition-colors"
+                              >
+                                ↗ {r.code}
+                              </a>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -163,6 +181,8 @@ export default function BuildTrack() {
           })}
         </div>
       </div>
+
+      <DesignDocs />
 
       {/* ── full project board ─────────────────────────────────────── */}
       <Modal open={boardOpen} onClose={() => setBoardOpen(false)} wide>

@@ -9,7 +9,7 @@ const pulseColor = (v: number) =>
   v <= 0 ? "rgba(142,156,192,0.14)" : v <= 2 ? "#2fd6b5" : v <= 5 ? "#ffb224" : "#ff7849";
 
 export default function CommandCenter() {
-  const { state, set, reset } = useNexus();
+  const { state, set, reset, profile } = useNexus();
   const { show, node } = useToast();
   const [parseOpen, setParseOpen] = useState(false);
   const [parsed, setParsed] = useState(PARSED_PREVIEW);
@@ -80,7 +80,7 @@ export default function CommandCenter() {
             <div className="flex items-center gap-3">
               <span className="kicker text-amber">Command Center</span>
               <span className="h-px flex-1 bg-edge" />
-              <span className="kicker text-fog">op: hired-by-a-giant</span>
+              <span className="kicker text-fog truncate max-w-[180px]">op: {profile.name}</span>
             </div>
             <h1 className="display font-bold tracking-tight text-snow mt-5 text-[44px] leading-[1.02] sm:text-6xl xl:text-7xl">
               NEXUS<span className="text-amber">.</span>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { RES_CATEGORIES, RES_BOOKS, RES_OFF_ROADMAP } from "../data";
+import { RES_CATEGORIES, RES_BOOKS, RES_OFF_ROADMAP, RES_QUARTER_HINTS, QUARTERS } from "../data";
 import { SectionHead, Reveal, Icon } from "./ui";
 
 const LEVEL_COLOR: Record<string, string> = {
@@ -98,6 +98,10 @@ export default function ResourceLibrary() {
                       {c.inPlan ? (
                         <span className="mono text-[8.5px] tracking-wider uppercase px-2 py-0.5 rounded-full border border-amber/55 text-amber bg-amber/10 flex items-center gap-1">
                           <Icon name="flag" size={9} /> in plan · {c.inPlan}
+                        </span>
+                      ) : RES_QUARTER_HINTS[c.code] ? (
+                        <span className="mono text-[8.5px] tracking-wider uppercase px-2 py-0.5 rounded-full border border-sky/45 text-sky bg-sky/10 flex items-center gap-1">
+                          <Icon name="chevR" size={9} /> placed · {QUARTERS[RES_QUARTER_HINTS[c.code] - 1].label}
                         </span>
                       ) : (
                         <span className="mono text-[8.5px] tracking-wider uppercase px-2 py-0.5 rounded-full border border-edge text-fog/70">

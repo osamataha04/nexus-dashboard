@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { COMPANIES, TIER_COLORS, type Company } from "../data";
+import { HiringRadar } from "./PlanPanels";
 import { useNexus } from "../store";
 import { SectionHead, Reveal, Icon, Check, Modal, Chip, Meter } from "./ui";
 
@@ -31,7 +32,7 @@ export default function Companies() {
     <section id="companies" className="py-16 scroll-mt-24">
       <SectionHead
         index="07"
-        kicker="25 Target Companies"
+        kicker={`${COMPANIES.length} Target Companies · 5 Domains`}
         color="#45c8e8"
         title="Company Intelligence"
         desc="Every target company's exact hiring pipeline, what passes, what fails, and what you need to build before applying. Tick only when genuinely ready — not aspirationally."
@@ -40,13 +41,15 @@ export default function Companies() {
             <div className="panel px-5 py-3 text-center" style={{ borderColor: "rgba(69,200,232,0.35)" }}>
               <div className="kicker text-[9px] text-fog">companies ready</div>
               <div className="display font-bold text-3xl text-cyan tabular-nums">
-                {ready}<span className="text-fog text-base">/25</span>
+                {ready}<span className="text-fog text-base">/{COMPANIES.length}</span>
               </div>
               <div className="kicker text-[8.5px] text-cyan/80 mt-0.5">apply jun 2030</div>
             </div>
           </Reveal>
         }
       />
+
+      <HiringRadar />
 
       {/* pre-application checklist header */}
       <Reveal className="mb-6">

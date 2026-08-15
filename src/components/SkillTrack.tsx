@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { CP_TOPICS, MATH_SUBJECTS } from "../data";
 import { useNexus, clamp, todayKey } from "../store";
-import { SectionHead, Reveal, Meter, Icon, Stepper, Check, Chip } from "./ui";
+import { SectionHead, Reveal, Meter, Icon, Stepper, Check, Chip, useToast } from "./ui";
+import { CFChart, MockLog } from "./SkillPanels";
 
 function cfTitle(r: number) {
   if (r >= 2400) return { t: "Grandmaster", c: "#ff5c7a" };
@@ -15,6 +16,7 @@ function cfTitle(r: number) {
 
 export default function SkillTrack() {
   const { state, set } = useNexus();
+  const { show, node } = useToast();
   const [cName, setCName] = useState("");
   const [cDelta, setCDelta] = useState("50");
   const [cRank, setCRank] = useState("500");
@@ -47,6 +49,7 @@ export default function SkillTrack() {
 
   return (
     <section id="skill" className="py-16 scroll-mt-24">
+      {node}
       <SectionHead
         index="05"
         kicker="Competitive Programming"
@@ -126,6 +129,16 @@ export default function SkillTrack() {
                   <span className="text-[12px] text-mist flex-1 truncate">{c.name}</span>
                   <span className="mono text-[9.5px] text-fog">rk {c.rank}</span>
                   <span className="mono text-[9.5px] text-fog hidden sm:block">{c.date}</span>
+                  <button
+                    className="btn !p-1 hover:!border-rose/60 hover:!text-rose"
+                    title="Remove this contest entry"
+                    onClick={() => {
+                      set((s) => ({ ...s, cp: { ...s.cp, rating: clamp(s.cp.rating - c.delta, 0, 4000), contests: s.cp.contests.filter((x) => x.id !== c.id) } }));
+                      show(`Contest removed — rating adjusted by ${c.delta >= 0 ? "-" : "+"}${Math.abs(c.delta)}.`, "#8e9cc0");
+                    }}
+                  >
+                    <Icon name="x" size={10} />
+                  </button>
                 </div>
               ))}
             </div>
@@ -159,6 +172,12 @@ export default function SkillTrack() {
             <p className="text-[11px] text-fog mt-4">Tick a topic when you can solve a 1600+ problem in it cold, timed.</p>
           </div>
         </Reveal>
+      </div>
+
+      {/* ── climb + mocks ─────────────────────────────────────────── */}
+      <div className="grid lg:grid-cols-[1.25fr_1fr] gap-5 mt-14">
+        <CFChart />
+        <MockLog />
       </div>
 
       {/* ── math spine ───────────────────────────────────────────── */}

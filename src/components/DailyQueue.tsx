@@ -2,13 +2,14 @@ import { useState } from "react";
 import confetti from "canvas-confetti";
 import { TRACKS, HABITS } from "../data";
 import { useNexus, todayKey, habitStreak, DAY_MS, bumpActivity } from "../store";
-import { Icon, SectionHead, Reveal, Check, Meter } from "./ui";
+import { Icon, SectionHead, Reveal, Check, Meter, useToast } from "./ui";
 
 const fire = (color: string) =>
   confetti({ particleCount: 70, spread: 64, origin: { y: 0.6 }, colors: [color, "#ffb224", "#eaf0fc"], disableForReducedMotion: true });
 
 export default function DailyQueue() {
   const { state, set } = useNexus();
+  const { show, node } = useToast();
   const [offset, setOffset] = useState(0);
   const date = new Date(Date.now() + offset * DAY_MS);
   const label =
@@ -40,6 +41,7 @@ export default function DailyQueue() {
 
   return (
     <section id="daily" className="py-16 scroll-mt-24">
+      {node}
       <SectionHead
         index="02"
         kicker="Today"
@@ -58,6 +60,18 @@ export default function DailyQueue() {
             <button className="btn !p-2.5" onClick={() => setOffset((o) => o + 1)} aria-label="next day">
               <Icon name="arrowR" size={14} />
             </button>
+            {offset === 0 && (
+              <button
+                className="btn !py-2.5 !px-3 !text-[9px] flex items-center gap-1.5"
+                title="Uncheck every track task for today"
+                onClick={() => {
+                  set((s) => ({ ...s, trackDone: Object.fromEntries(TRACKS.map((t) => [t.id, 0])) }));
+                  show("Day cleared — every track reset to its first task.", "#8e9cc0");
+                }}
+              >
+                <Icon name="refresh" size={11} /> CLEAR DAY
+              </button>
+            )}
           </Reveal>
         }
       />

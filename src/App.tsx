@@ -1,5 +1,12 @@
-import { Component, type ErrorInfo, type ReactNode } from "react";
-import { NexusProvider } from "./store";
+import { Component, useEffect, useState, type ErrorInfo, type ReactNode } from "react";
+import {
+  NexusProvider,
+  loadProfiles,
+  saveProfiles,
+  loadActive,
+  saveActive,
+  type Profile,
+} from "./store";
 import Sidebar from "./components/Sidebar";
 import CommandCenter from "./components/CommandCenter";
 import DailyQueue from "./components/DailyQueue";
@@ -10,6 +17,7 @@ import Finance from "./components/Finance";
 import Companies from "./components/Companies";
 import TodoList from "./components/TodoList";
 import ResourceLibrary from "./components/ResourceLibrary";
+import { Onboarding, ProfileModal } from "./components/Profile";
 import { Icon } from "./components/ui";
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { err: string }> {
@@ -31,7 +39,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { err: string }> 
             </span>
             <div>
               <div className="display font-bold text-xl text-snow">NEXUS hit a runtime error</div>
-              <div className="kicker text-rose text-[9px] mt-0.5">diagnostic panel · v1.2</div>
+              <div className="kicker text-rose text-[9px] mt-0.5">diagnostic panel · v2.0</div>
             </div>
           </div>
           <p className="text-[13px] text-fog mt-4 leading-relaxed">
@@ -54,53 +62,118 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { err: string }> 
 }
 
 export default function App() {
-  return (
-    <ErrorBoundary>
-      <NexusProvider>
+  const [profiles, setProfiles] = useState<Profile[]>(loadProfiles);
+  const [activeId, setActiveId] = useState<string | null>(loadActive);
+  const [profileOpen, setProfileOpen] = useState(false);
+
+  useEffect(() => saveProfiles(profiles), [profiles]);
+  useEffect(() => saveActive(activeId), [activeId]);
+
+  const active = profiles.find((p) => p.id === activeId) ?? null;
+
+  const shell = (
+    <>
       <div className="nexus-bg" />
       <div className="nexus-grid" />
       <div className="nexus-scan" />
-      <Sidebar />
+    </>
+  );
 
-      <main className="lg:pl-[248px] pt-24 lg:pt-0">
-        <div className="max-w-[1220px] mx-auto px-4 sm:px-7 lg:px-10">
-          <CommandCenter />
-          <DailyQueue />
-          <Analytics />
-          <BuildTrack />
-          <SkillTrack />
-          <Finance />
-          <Companies />
-          <TodoList />
-          <ResourceLibrary />
+  /* ── no operator yet → registration gate ── */
+  if (!active) {
+    return (
+      <ErrorBoundary>
+        {shell}
+        <Onboarding
+          profiles={profiles}
+          onResume={(id) => setActiveId(id)}
+          onCreate={(name, startDate) => {
+            const p: Profile = { id: `op-${Date.now()}`, name, startDate };
+            setProfiles((ps) => [...ps, p]);
+            setActiveId(p.id);
+          }}
+        />
+      </ErrorBoundary>
+    );
+  }
 
-          <footer className="border-t border-edge py-10 mb-4">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
-              <div>
-                <div className="flex items-center gap-2.5">
-                  <span className="grid place-items-center w-8 h-8 rounded-md border border-amber/50 bg-amber/10 text-amber">
-                    <Icon name="bolt" size={15} />
-                  </span>
-                  <span className="display font-bold text-xl text-snow tracking-tight">NEXUS</span>
+  const patchProfile = (patch: Partial<Profile>) =>
+    setProfiles((ps) => ps.map((p) => (p.id === active.id ? { ...p, ...patch } : p)));
+  const createProfile = (name: string, startDate: string) => {
+    const p: Profile = { id: `op-${Date.now()}`, name, startDate };
+    setProfiles((ps) => [...ps, p]);
+    setActiveId(p.id);
+  };
+  const deleteProfile = (id: string) => {
+    try {
+      localStorage.removeItem(`nexus-state-v2::${id}`);
+    } catch {
+      /* noop */
+    }
+    setProfiles((ps) => ps.filter((p) => p.id !== id));
+    if (activeId === id) setActiveId(null);
+  };
+
+  return (
+    <ErrorBoundary>
+      {shell}
+      <NexusProvider
+        key={active.id}
+        profile={active}
+        profiles={profiles}
+        patchProfile={patchProfile}
+        switchProfile={(id) => {
+          setActiveId(id);
+          setProfileOpen(false);
+        }}
+        createProfile={createProfile}
+        deleteProfile={deleteProfile}
+      >
+        <Sidebar onOperator={() => setProfileOpen(true)} />
+
+        <main className="lg:pl-[248px] pt-24 lg:pt-0">
+          <div className="max-w-[1220px] mx-auto px-4 sm:px-7 lg:px-10">
+            <CommandCenter />
+            <DailyQueue />
+            <Analytics />
+            <BuildTrack />
+            <SkillTrack />
+            <Finance />
+            <Companies />
+            <TodoList />
+            <ResourceLibrary />
+
+            <footer className="border-t border-edge py-10 mb-4">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+                <div>
+                  <div className="flex items-center gap-2.5">
+                    <span className="grid place-items-center w-8 h-8 rounded-md border border-amber/50 bg-amber/10 text-amber">
+                      <Icon name="bolt" size={15} />
+                    </span>
+                    <span className="display font-bold text-xl text-snow tracking-tight">NEXUS</span>
+                    <span className="mono text-[10px] text-fog mt-1">· operator {active.name}</span>
+                  </div>
+                  <p className="mono text-[10.5px] text-fog mt-3 leading-relaxed max-w-md">
+                    one goal · get hired by a giant · 4 years · 44 companies · 5 domains · every task traces to a named
+                    interview screen. Each operator&rsquo;s state lives in this browser only — nothing leaves this machine.
+                  </p>
                 </div>
-                <p className="mono text-[10.5px] text-fog mt-3 leading-relaxed max-w-md">
-                  one goal · get hired by a giant · 4 years · 44 companies · 5 domains · every task traces to a named interview screen. State lives in your browser — nothing leaves this machine.
-                </p>
+                <div className="flex items-center gap-6">
+                  <div className="text-right">
+                    <div className="kicker text-[9px] text-fog">arc window</div>
+                    <div className="mono text-[12px] text-mist mt-1">{active.startDate} → +4Y</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="kicker text-[9px] text-fog">signature target</div>
+                    <div className="mono text-[12px] text-amber mt-1">🏁 +4 years</div>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-6">
-                <div className="text-right">
-                  <div className="kicker text-[9px] text-fog">arc window</div>
-                  <div className="mono text-[12px] text-mist mt-1">JUL 2026 → JUN 2030</div>
-                </div>
-                <div className="text-right">
-                  <div className="kicker text-[9px] text-fog">signature target</div>
-                  <div className="mono text-[12px] text-amber mt-1">🏁 JUN 2030</div>
-                </div>
-              </div>
-            </div>
-          </footer>
-        </div>
-      </main>
+            </footer>
+          </div>
+        </main>
+
+        <ProfileModal open={profileOpen} onClose={() => setProfileOpen(false)} />
       </NexusProvider>
     </ErrorBoundary>
   );

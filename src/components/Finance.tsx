@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { INCOME_MONTHS, EXPENSES, NEGOTIATIONS } from "../data";
 import { useNexus, dayNumber, fmtMoney } from "../store";
 import { SectionHead, Reveal, Meter, Icon, Check, useToast } from "./ui";
+import FreelanceEngine from "./FreelanceEngine";
 
 const W = 740, H = 210, PAD = 8;
 const MAX = 9500;
@@ -257,21 +258,28 @@ export default function Finance() {
                 </div>
                 <button
                   className={`btn mt-4 w-full flex items-center justify-center gap-2 ${st.done ? "" : ready ? "btn-amber" : "opacity-40 cursor-not-allowed"}`}
+                  title={st.done ? "Click to revert — misclicks happen" : undefined}
                   onClick={() => {
-                    if (st.done) return;
+                    if (st.done) {
+                      set((s) => ({ ...s, negotiations: { ...s.negotiations, [n.id]: { ...st, done: false } } }));
+                      show(`${n.title} — reverted to pending. Triggers kept.`, "#8e9cc0");
+                      return;
+                    }
                     if (!ready) return show("All triggers must be met first.", "#ff5c7a");
                     set((s) => ({ ...s, negotiations: { ...s.negotiations, [n.id]: { ...st, done: true } } }));
                     show(`${n.title} — executed. New rate locked.`, n.color);
                   }}
                 >
-                  <Icon name={st.done ? "trophy" : "dollar"} size={13} />
-                  {st.done ? "EXECUTED" : "MARK EXECUTED"}
+                  <Icon name={st.done ? "refresh" : "dollar"} size={13} />
+                  {st.done ? "REVERT EXECUTION" : "MARK EXECUTED"}
                 </button>
               </div>
             </Reveal>
           );
         })}
       </div>
+
+      <FreelanceEngine />
     </section>
   );
 }

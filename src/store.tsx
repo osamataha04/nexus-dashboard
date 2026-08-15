@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { COMPANIES, MATH_SUBJECTS, NEGOTIATIONS, PROJECTS, TRACKS, WEEK_SETS, TASK_BANK } from "./data";
+import { COMPANIES, MATH_SUBJECTS, NEGOTIATIONS, PROJECTS, TRACKS, WEEK_SETS, TASK_BANK, type MockSession, type Gig } from "./data";
 
 /* ── types ────────────────────────────────────────────────────────── */
 export type PlanTask = {
@@ -30,6 +30,16 @@ export type NexusState = {
   snapshots: { d: string; v: number }[];
   plans: Record<string, PlanTask[]>;
   planIssued: string[];
+  quarterChecks: Record<string, boolean[]>;
+  mocks: MockSession[];
+  designDocs: Record<string, { status: number; link: string }>;
+  incomeActual: { m: string; v: number }[];
+  freelance: {
+    active: Record<string, boolean>;
+    gigs: Gig[];
+    extra: string[];
+    links: { github: string; resume: string; portfolio: string };
+  };
 };
 
 const defaults = (): NexusState => ({
@@ -48,9 +58,27 @@ const defaults = (): NexusState => ({
   snapshots: [],
   plans: {},
   planIssued: [],
+  quarterChecks: {},
+  mocks: [],
+  designDocs: {},
+  incomeActual: [],
+  freelance: { active: {}, gigs: [], extra: [], links: { github: "", resume: "", portfolio: "" } },
 });
 
-const KEY = "nexus-state-v2";
+/* ── operator profiles (multi-user) ────────────────────────────────── */
+export type Profile = { id: string; name: string; startDate: string };
+const PKEY = "nexus-profiles-v1";
+const AKEY = "nexus-active-v1";
+const stateKey = (id: string) => `nexus-state-v2::${id}`;
+
+export function loadProfiles(): Profile[] {
+  try { return JSON.parse(localStorage.getItem(PKEY) ?? "[]") as Profile[]; } catch { return []; }
+}
+export function saveProfiles(p: Profile[]) { try { localStorage.setItem(PKEY, JSON.stringify(p)); } catch { /* noop */ } }
+export function loadActive(): string | null { return localStorage.getItem(AKEY); }
+export function saveActive(id: string | null) {
+  try { id ? localStorage.setItem(AKEY, id) : localStorage.removeItem(AKEY); } catch { /* noop */ }
+}
 
 const merge = (raw: unknown): NexusState => {
   const d = defaults();
@@ -71,12 +99,17 @@ const merge = (raw: unknown): NexusState => {
     snapshots: Array.isArray(saved.snapshots) ? saved.snapshots : [],
     plans: saved.plans ?? {},
     planIssued: Array.isArray(saved.planIssued) ? saved.planIssued : [],
+    quarterChecks: saved.quarterChecks ?? {},
+    mocks: Array.isArray(saved.mocks) ? saved.mocks : [],
+    designDocs: saved.designDocs ?? {},
+    incomeActual: Array.isArray(saved.incomeActual) ? saved.incomeActual : [],
+    freelance: { ...d.freelance, ...(saved.freelance ?? {}), links: { ...d.freelance.links, ...(saved.freelance?.links ?? {}) }, gigs: saved.freelance?.gigs ?? [], extra: saved.freelance?.extra ?? [], active: saved.freelance?.active ?? {} },
   };
 };
 
-const load = (): NexusState => {
+const loadFor = (id: string): NexusState => {
   try {
-    return merge(JSON.parse(localStorage.getItem(KEY) ?? "null"));
+    return merge(JSON.parse(localStorage.getItem(stateKey(id)) ?? "null"));
   } catch {
     return defaults();
   }
@@ -88,19 +121,50 @@ type Ctx = {
   set: (fn: (s: NexusState) => NexusState) => void;
   restore: (raw: unknown) => boolean;
   reset: () => void;
+  profile: Profile;
+  profiles: Profile[];
+  patchProfile: (patch: Partial<Profile>) => void;
+  switchProfile: (id: string) => void;
+  createProfile: (name: string, startDate: string) => void;
+  deleteProfile: (id: string) => void;
 };
 
 const NexusCtx = createContext<Ctx | null>(null);
 
-export function NexusProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<NexusState>(load);
+type ProviderProps = {
+  profile: Profile;
+  profiles: Profile[];
+  patchProfile: (patch: Partial<Profile>) => void;
+  switchProfile: (id: string) => void;
+  createProfile: (name: string, startDate: string) => void;
+  deleteProfile: (id: string) => void;
+  children: ReactNode;
+};
+
+export function NexusProvider({ profile, profiles, patchProfile, switchProfile, createProfile, deleteProfile, children }: ProviderProps) {
+  const [state, setState] = useState<NexusState>(() => loadFor(profile.id));
+
+  /* per-operator persistence */
   useEffect(() => {
     try {
-      localStorage.setItem(KEY, JSON.stringify(state));
+      localStorage.setItem(stateKey(profile.id), JSON.stringify(state));
     } catch {
       /* storage full / private mode — run in-memory */
     }
-  }, [state]);
+  }, [state, profile.id]);
+
+  /* seed the arc start from the operator profile */
+  useEffect(() => {
+    setState((s) => (s.startDate ? s : { ...s, startDate: profile.startDate }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile.id]);
+
+  /* console edits to the start date flow back into the profile */
+  useEffect(() => {
+    if (state.startDate && state.startDate !== profile.startDate) patchProfile({ startDate: state.startDate });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.startDate]);
+
   /* daily progress snapshot — one entry per day, updated in place */
   useEffect(() => {
     const today = todayKey();
@@ -124,11 +188,17 @@ export function NexusProvider({ children }: { children: ReactNode }) {
         return true;
       },
       reset: () => {
-        localStorage.removeItem(KEY);
-        setState(defaults());
+        localStorage.removeItem(stateKey(profile.id));
+        setState({ ...defaults(), startDate: state.startDate });
       },
+      profile,
+      profiles,
+      patchProfile,
+      switchProfile,
+      createProfile,
+      deleteProfile,
     }),
-    [state]
+    [state, profile, profiles, patchProfile, switchProfile, createProfile, deleteProfile]
   );
   return <NexusCtx.Provider value={value}>{children}</NexusCtx.Provider>;
 }
@@ -218,7 +288,8 @@ export const bumpActivity = (s: NexusState, delta = 1): NexusState => {
 const PLAN_CAP = 7;
 
 export function ensurePlan(s: NexusState, dayKey: string): NexusState {
-  if (s.plans[dayKey]) return s;
+  /* regenerate when absent OR when a poisoned empty plan was persisted */
+  if ((s.plans[dayKey] ?? []).length > 0) return s;
   const dow = new Date(dayKey + "T12:00:00").getDay();
   const cats = WEEK_SETS[dow];
 

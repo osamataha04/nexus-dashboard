@@ -1,9 +1,13 @@
+import { useState } from "react";
 import { COMPANIES, OBJECTIVES, QUARTERS } from "../data";
 import { useNexus, sectionProgress, quarterIndex } from "../store";
-import { SectionHead, Reveal, Meter, Ring, Icon, CountUp } from "./ui";
+import { SectionHead, Reveal, Meter, Ring, Icon, CountUp, useToast } from "./ui";
+import { QuarterFocus, Heatmap } from "./FocusPanels";
 
 export default function Analytics() {
-  const { state } = useNexus();
+  const { state, reset } = useNexus();
+  const { show, node } = useToast();
+  const [armWipe, setArmWipe] = useState(false);
   const p = sectionProgress(state);
   const qi = quarterIndex(state.startDate);
 
@@ -12,7 +16,7 @@ export default function Analytics() {
     { label: "Project Build", pct: p.projPct, color: "#ffb224", note: "9 systems shipped" },
     { label: "CP Rating", pct: p.cpPct, color: "#ff5c7a", note: "toward 2000" },
     { label: "Math Spine", pct: p.mathPct, color: "#b48cff", note: "lectures + problem sets" },
-    { label: "Dossiers", pct: p.coPct, color: "#45c8e8", note: `${p.ready}/25 application-ready` },
+    { label: "Dossiers", pct: p.coPct, color: "#45c8e8", note: `${p.ready}/${COMPANIES.length} application-ready` },
     { label: "Plan Execution", pct: p.todoPct, color: "#ff7849", note: `${p.planDone}/${p.planTotal} daily tasks cleared` },
     { label: "Arc Elapsed", pct: p.timePct, color: "#6fdd8b", note: QUARTERS[qi].label },
   ];
@@ -30,6 +34,7 @@ export default function Analytics() {
 
   return (
     <section id="analytics" className="py-16 scroll-mt-24">
+      {node}
       <SectionHead
         index="03"
         kicker="Analytics"
@@ -38,16 +43,41 @@ export default function Analytics() {
         desc="Percentage completion at every level — per system, per quarter, per major objective, and the whole plan."
         right={
           <Reveal>
-            <div className="panel px-5 py-3 flex items-center gap-6">
-              <div>
-                <div className="kicker text-[9px] text-fog">overall plan</div>
-                <div className="display font-bold text-2xl text-sky"><CountUp value={Math.round(p.overall)} suffix="%" /></div>
+            <div className="panel px-5 py-3.5 flex flex-col gap-3">
+              <div className="flex items-center gap-6">
+                <div>
+                  <div className="kicker text-[9px] text-fog">overall plan</div>
+                  <div className="display font-bold text-2xl text-sky"><CountUp value={Math.round(p.overall)} suffix="%" /></div>
+                </div>
+                <div className="w-px h-8 bg-edge" />
+                <div>
+                  <div className="kicker text-[9px] text-fog">quarter</div>
+                  <div className="display font-bold text-2xl text-snow">{qi + 1}<span className="text-fog text-sm">/16</span></div>
+                </div>
               </div>
-              <div className="w-px h-8 bg-edge" />
-              <div>
-                <div className="kicker text-[9px] text-fog">quarter</div>
-                <div className="display font-bold text-2xl text-snow">{qi + 1}<span className="text-fog text-sm">/16</span></div>
-              </div>
+              {armWipe ? (
+                <div className="flex items-center gap-2">
+                  <button
+                    className="btn !py-1.5 !px-3 !text-[9px] !border-rose/60 !text-rose flex-1 flex items-center justify-center gap-1.5"
+                    onClick={() => {
+                      reset();
+                      setArmWipe(false);
+                      show("All progress wiped — sliders, checks, streaks, history. Arc start kept.", "#ff5c7a");
+                    }}
+                  >
+                    <Icon name="trash" size={10} /> YES — WIPE EVERYTHING
+                  </button>
+                  <button className="btn !py-1.5 !px-2.5 !text-[9px]" onClick={() => setArmWipe(false)}>KEEP</button>
+                </div>
+              ) : (
+                <button
+                  className="btn !py-1.5 !px-3 !text-[9px] w-full flex items-center justify-center gap-1.5"
+                  title="Zeros every tracker. Your arc start date and profile stay."
+                  onClick={() => setArmWipe(true)}
+                >
+                  <Icon name="refresh" size={10} /> RESET ALL PROGRESS
+                </button>
+              )}
             </div>
           </Reveal>
         }
@@ -108,6 +138,12 @@ export default function Analytics() {
             </div>
           </Reveal>
         ))}
+      </div>
+
+      {/* quarterly focus + heatmap */}
+      <div className="grid md:grid-cols-3 gap-5 mt-5">
+        <QuarterFocus />
+        <Heatmap />
       </div>
 
       {/* progress memory */}

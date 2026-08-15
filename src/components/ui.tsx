@@ -32,6 +32,9 @@ const PATHS: Record<string, ReactNode> = {
   shield: <path d="M12 2.8 19.5 5.6v6c0 5-3.2 8.2-7.5 9.6-4.3-1.4-7.5-4.6-7.5-9.6v-6L12 2.8z" />,
   spark: (<><path d="M12 3v3.5M12 17.5V21M3 12h3.5M17.5 12H21" /><path d="m6 6 2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" /></>),
   book: (<><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z" /><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-2.5" /></>),
+  user: (<><circle cx="12" cy="8" r="4" /><path d="M4.5 20.5c1.2-3.6 4-5.5 7.5-5.5s6.3 1.9 7.5 5.5" /></>),
+  trash: (<><path d="M4.5 6.5h15M9.5 6.5V4.8A1.3 1.3 0 0 1 10.8 3.5h2.4a1.3 1.3 0 0 1 1.3 1.3v1.7M6.5 6.5l1 13.2a1.4 1.4 0 0 0 1.4 1.3h6.2a1.4 1.4 0 0 0 1.4-1.3l1-13.2" /><path d="M10 10.5v6M14 10.5v6" /></>),
+  switch: (<><path d="M7 4 3.5 7.5 7 11" /><path d="M3.5 7.5H17a3.5 3.5 0 0 1 3.5 3.5v1" /><path d="m17 20 3.5-3.5L17 13" /><path d="M20.5 16.5H7A3.5 3.5 0 0 1 3.5 13v-1" /></>),
 };
 
 export function Icon({ name, size = 16, className = "", style }: { name: string; size?: number; className?: string; style?: CSSProperties }) {

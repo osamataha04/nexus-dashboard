@@ -402,7 +402,7 @@ export const COMPANIES: Company[] = [
     ["General technical + behavioral ×2", "Team-matched technical rounds", "Superday — ~8 weeks total"],
     "Narrated uncertainty: 'share your thought process, discuss trade-offs, be clear about what you know and don't know'.",
     "One strong area, one dead area. Performing confidence instead of reasoning.",
-    "ATLAS-grade systems + math spine"),
+    "Lock-free C++ (RAII allocator) + Order Book + Ito's lemma"),
   hft("hrt", "Hudson River Trading", "Quant Developer",
     ["CodeSignal OA (Python/C++): LC-hard DP in 2 hours", "Superday — 3 live-coding rounds", "Implementation + design explained out loud"],
     "CF-style speed with zero bugs. Systems intuition: latency, memory, constant factors.",
@@ -846,6 +846,30 @@ export const RES_CATEGORIES: ResCategory[] = [
   },
 ];
 
+/* which quarter each csdiy complement earns its place (1..16) */
+export const RES_QUARTER_HINTS: Record<string, number> = {
+  "CS50P": 1, "Helsinki MOOC": 1, "MIT 6.006": 1, "CS61B": 1, "Info Retrieval": 1,
+  "CS70": 2,
+  "CS50": 3,
+  "DDCA": 4,
+  "CSAPP": 5, "MIT 6.031": 5, "CS169": 5, "LaTeX": 5,
+  "CS162": 7,
+  "NJU OS": 8,
+  "MIT 6.824": 9, "Top-Down": 9, "CS168": 9,
+  "MIT 6.046 / CS170": 10,
+  "CMU 15-799": 11,
+  "CS186": 12,
+  "GAMES101": 13,
+  "CS61C": 14, "AICS": 14,
+  "CS149": 14,
+  "CS143": 15, "NJU / PKU Compilers": 15, "CS242": 15, "Cambridge Semantics": 15, "CMU 15-442": 15, "CS231n": 15, "MLC": 14, "Karpathy Zero→Hero": 15,
+};
+
+export const resForQuarter = (qid: number) =>
+  RES_CATEGORIES.flatMap((cat) =>
+    cat.courses.filter((c) => RES_QUARTER_HINTS[c.code] === qid && !c.inPlan).map((c) => ({ code: c.code, url: c.url, topic: cat.label }))
+  );
+
 export const RES_OFF_ROADMAP = [
   "Systems Security (CS161, MIT 6.858, SEED Labs)",
   "Web Development (CS142, CS571, Full Stack Open)",
@@ -866,6 +890,67 @@ export const RES_BOOKS: ResBook[] = [
   { title: "Engineering a Compiler", author: "Cooper & Torczon", inPlan: "Y4 Q3–Q4", note: "Ch.5 SSA + liveness, Ch.13 register allocation — whiteboard-provable by application time." },
   { title: "Software Engineering at Google", author: "Winters, Manshreck, Wright", inPlan: "Y1 Q2 → Y4", note: "Free at abseil.io. Code Review chapter in Y1 Q2, Testing chapters in Y2 — the daily code-quality standard." },
   { title: "Principles of Mathematical Analysis (Rudin)", author: "Walter Rudin", inPlan: "Y4 · 6 weeks", note: "Ch.1–4 only — proof fluency for math-heavy whiteboards. Reduced scope, deliberately." },
+];
+
+/* ── quarterly focus · mocks · hiring windows · design docs · freelance ── */
+export type MockPhase = { id: string; label: string; freq: string; platform: string; when: string };
+export const MOCK_PHASES: MockPhase[] = [
+  { id: "self", label: "Self-mock — solve mediums out loud, record audio", freq: "2×/week", platform: "LeetCode", when: "Y2 Q3 – Q4" },
+  { id: "peer", label: "Peer mock with a study partner", freq: "1×/week", platform: "Pramp / Discord communities", when: "Y3 · all quarters" },
+  { id: "pro", label: "Professional mock — experienced engineers", freq: "2×/month", platform: "interviewing.io", when: "Y4 Q1 – Q3" },
+  { id: "company", label: "Company-specific style practice", freq: "3×/week", platform: "interviewing.io + peers", when: "Y4 Q4 · pre-application" },
+];
+export type MockSession = { id: string; date: string; phase: string; partner: string; topic: string; verdict: "strong" | "okay" | "rough"; note: string };
+
+export type HiringWindow = { id: string; label: string; months: number[]; tier: string; note: string; color: string };
+export const HIRING_WINDOWS: HiringWindow[] = [
+  { id: "hft-fall", label: "HFT Fall Wave", months: [8, 9], tier: "All 13 HFT targets", note: "Jane Street · Citadel · HRT · Two Sigma · Jump · Optiver · IMC · DRW · SIG · Tower · XTX · Akuna · Five Rings — apply at CF 1800+", color: "#ff5c7a" },
+  { id: "hft-spring", label: "HFT Spring Wave", months: [1, 2], tier: "All 13 HFT targets", note: "Second major wave — new-grad and off-cycle QD roles", color: "#ffb224" },
+  { id: "ai-rolling", label: "AI Infra (rolling)", months: [0, 3, 6, 9], tier: "NVIDIA · DeepMind · OpenAI · Anthropic · xAI · Meta AI", note: "No fixed season — CUDA matmul + Triton + transformer are the entry", color: "#2fd6b5" },
+  { id: "systems-rolling", label: "Kernel · Compiler · DB (rolling)", months: [2, 5, 8, 11], tier: "Apple · Google · ClickHouse · Snowflake · Databricks · MongoDB", note: "Contribution history and benchmarked projects open these year-round", color: "#5fb0ff" },
+];
+
+export type DesignDoc = { id: string; title: string; when: string; focus: string };
+export const DESIGN_DOCS: DesignDoc[] = [
+  { id: "heap", title: "Heap Allocator — arena + slab", when: "Y2 Q1", focus: "First real 5-section doc. Make Motivation compelling; Alternatives Considered is what separates it from a to-do list." },
+  { id: "xv6", title: "xv6 custom modification", when: "Y2 Q3", focus: "Second doc — Alternatives Considered should feel natural, not forced, by now." },
+  { id: "tcpip", title: "TCP/IP Stack", when: "Y3 Q1", focus: "Design docs become the default here, no longer a special event." },
+  { id: "sql", title: "SQL Storage Engine", when: "Y3 Q3", focus: "Vectorized execution design + block-size analysis + benchmarks." },
+  { id: "raft", title: "Raft distributed KV store", when: "Y3 Q3", focus: "Log replication, leader election, compaction, linearizability argument." },
+  { id: "orderbook", title: "Order Book Simulator", when: "Y3 Q4", focus: "Lock-free SPSC ring buffer design + sub-1μs latency analysis." },
+  { id: "disttrain", title: "Distributed training design doc", when: "Y4 Q3", focus: "5-page system design: AllReduce variants, parallelism strategies, straggler detection, checkpoint recovery." },
+];
+export const DOC_STATUSES = ["Not started", "Drafting", "Self-review", "Done"];
+
+export type FreelanceSkill = { id: string; label: string; income: string; demand: number; gate: string; icon: string };
+export const FREELANCE_SKILLS: FreelanceSkill[] = [
+  { id: "py-auto", label: "Python automation / Excel scripting", income: "$50–200/mo (Y1)", demand: 3, gate: "6.100L underway", icon: "code" },
+  { id: "fastapi", label: "FastAPI backend APIs", income: "$25–60/hr gigs", demand: 4, gate: "Helsinki Parts 1–4 + APIs", icon: "cube" },
+  { id: "scraper", label: "Web scraping / Playwright", income: "per-gig (JS-heavy sites)", demand: 2, gate: "just-in-time — learn when a gig needs it", icon: "list" },
+  { id: "docker", label: "Docker + basic AWS deployment", income: "$25–60/hr", demand: 4, gate: "~20–30h one-time (Y2 Q3–Q4)", icon: "upload" },
+  { id: "db-opt", label: "Database / query optimization", income: "$30–80/hr", demand: 3, gate: "SQL Engine real (Y3)", icon: "sigma" },
+  { id: "cpp-review", label: "C/C++ code evaluation (RLHF tier)", income: "$75–135/hr", demand: 5, gate: "C solid — the single biggest income upgrade", icon: "check" },
+  { id: "cuda", label: "CUDA / HPC consulting", income: "$80–100+/hr", demand: 5, gate: "CUDA kernels + roofline (Y4 Q2)", icon: "radar" },
+  { id: "ml-deploy", label: "Model deployment gigs", income: "$95–200+/hr expert tier", demand: 4, gate: "PyTorch C++ ext + transformer (Y4)", icon: "chart" },
+  { id: "compiler-niche", label: "Custom linters / static analysis", income: "$100+/hr (scarce skill)", demand: 2, gate: "SSA + register allocation (Y4 Q3–Q4)", icon: "edit" },
+  { id: "due-diligence", label: "Code audit / technical due diligence", income: "very high per engagement", demand: 2, gate: "reputation + full portfolio (beyond Y4)", icon: "briefcase" },
+];
+
+export type Gig = { id: string; title: string; source: string; skill: string; amount: number; status: "applied" | "talk" | "won" | "lost"; date: string };
+export const GIG_SOURCES = ["Upwork", "Mostaql", "Outlier", "DataAnnotation", "Mercor", "Prolific", "Algora bounty", "Referral", "Other"];
+
+/* outside-plan skill → consulting angle matcher */
+export const SKILL_HINTS: { re: RegExp; angle: string; pay: string }[] = [
+  { re: /react|next|frontend|vue|typescript/i, angle: "Dashboards & internal tools — your NEXUS stack is the portfolio itself", pay: "$20–50/hr" },
+  { re: /design|figma|ui|ux/i, angle: "Design-to-code: turn Figma into production frontends", pay: "$15–40/hr" },
+  { re: /data|pandas|excel|sheet|etl/i, angle: "Data cleaning & reporting automation for SMBs", pay: "$10–30/hr" },
+  { re: /\bml\b|torch|tensorflow|model|llm|prompt/i, angle: "LLM tooling / model deployment — hottest freelance category in 2026", pay: "$30–80/hr" },
+  { re: /arabic|translat|localiz/i, angle: "Arabic localization tooling & content pipelines (rare, valuable)", pay: "$15–35/hr" },
+  { re: /wordpress|shopify|wix|web/i, angle: "Small-business sites + automation retainers", pay: "$10–25/hr" },
+  { re: /video|edit|premiere|davinci/i, angle: "Technical content editing for dev channels", pay: "$10–30/hr" },
+  { re: /math|tutor|teach/i, angle: "Discrete math / CS tutoring in Arabic & English", pay: "$8–20/hr" },
+  { re: /game|unity|godot/i, angle: "Gameplay scripting & tools gigs", pay: "$15–35/hr" },
+  { re: /security|ctf|pentest/i, angle: "⚠ Off-roadmap — park it; revisit only if security becomes a goal", pay: "—" },
 ];
 
 export const SUNDAY_REVIEW = [
