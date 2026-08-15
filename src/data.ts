@@ -704,7 +704,7 @@ export const PARSED_PREVIEW = [
 ];
 
 /* ── build identity — proves which version is actually live ────────── */
-export const BUILD_TAG = "v2.5 · radar nav + clean-slate storage + factory reset";
+export const BUILD_TAG = "v2.5.1 · self-purging storage";
 
 /* ── 10 · opportunity radar ───────────────────────────────────────── */
 export type JobPosting = {

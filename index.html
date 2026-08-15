@@ -20,10 +20,12 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      /* offline shell — registers the service worker on first load */
+      /* offline shell — registers the service worker on first load.
+         The ?v=2.5.1 query busts any stale worker left by an older build,
+         so this deploy always takes effect even on cached browsers. */
       if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
         window.addEventListener("load", function () {
-          navigator.serviceWorker.register("./sw.js").catch(function () {
+          navigator.serviceWorker.register("./sw.js?v=2.5.1").catch(function () {
             /* dev or unsupported context — the dashboard still works online */
           });
         });

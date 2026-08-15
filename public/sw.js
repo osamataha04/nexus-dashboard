@@ -1,5 +1,5 @@
 /* NEXUS service worker — offline-first shell */
-const CACHE = "nexus-shell-v2";
+const CACHE = "nexus-shell-v251";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (e) => {

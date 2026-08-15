@@ -63,6 +63,27 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { err: string }> 
 }
 
 export default function App() {
+  /* ── v2.5.1 migration purge: nuke every storage key older than the current
+     generation BEFORE any state is read. Deploying this build IS the cleanup —
+     the 56% zombie cannot survive it, on any browser, any deploy. ── */
+  useEffect(() => {
+    try {
+      Object.keys(localStorage)
+        .filter(
+          (k) =>
+            k === "nexus-state-v1" ||
+            k === "nexus-state-v2" ||
+            k.startsWith("nexus-state-v2::") ||
+            k === "nexus-profiles-v1" ||
+            k === "nexus-active-v1" ||
+            k === "nexus-progress"
+        )
+        .forEach((k) => localStorage.removeItem(k));
+    } catch {
+      /* private mode — nothing to purge */
+    }
+  }, []);
+
   const [profiles, setProfiles] = useState<Profile[]>(loadProfiles);
   const [activeId, setActiveId] = useState<string | null>(loadActive);
   const [profileOpen, setProfileOpen] = useState(false);
